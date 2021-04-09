@@ -19,6 +19,8 @@
 
 <script>
 import { signup } from '@/services/Auth.js';
+import { saveAuthToken } from '@/utils/localstorage.js';
+
 export default {
     data() {
         return {
@@ -33,7 +35,7 @@ export default {
         };
     },
     methods: {
-        signuphandler() {
+        async signuphandler() {
             this.errorText = null;
             for (const key in this.userdata) {
                 const data = this.userdata[key];
@@ -41,12 +43,10 @@ export default {
                     return (this.errorText = 'Fields cannot be empty!');
                 }
             }
-
-            //TODO: kayıt olduktan sonra ne olacağına karar ver.
-            // burada da accesstoken dönüyor
             try {
                 const response = await signup(this.userdata);
-                console.log(response);
+                saveAuthToken(response.accessToken);
+                this.$router.push('/main-page');
             } catch (error) {
                 return (this.errorText = 'There was an error :(');
             }

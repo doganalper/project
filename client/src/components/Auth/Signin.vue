@@ -35,6 +35,7 @@ export default {
                 // response.accessToken dönüyor.
                 const response = await signin(payload);
                 saveAuthToken(response.accessToken);
+                this.$router.push('/main-page');
             } catch (err) {
                 return (this.errorText = 'User not found!');
             }

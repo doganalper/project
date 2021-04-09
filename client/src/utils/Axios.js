@@ -3,7 +3,7 @@ import { getAccessToken } from '../utils/localstorage';
 
 const Axios = axios.create({
     baseURL: 'http://localhost:3000'
-})
+});
 
 Axios.interceptors.request.use(
     (config) => {
@@ -39,6 +39,5 @@ Axios.interceptors.response.use(
     }
 );
 */
-
 
 export default Axios;
