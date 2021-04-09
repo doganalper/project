@@ -1,4 +1,6 @@
 const UserModel = require('../models/userModel');
+const ProjectModel = require('../models/projectModel');
+
 const { generateAccessToken } = require('../utils/authFunctions');
 
 exports.createUser = async (req, res) => {
@@ -48,9 +50,22 @@ exports.login = async (req, res) => {
 exports.getUser = async (req, res) => {
     const user = req.user;
     const foundUser = await UserModel.findById(user.id);
+
+    let projects = [];
+    if (foundUser.projects.lengt !== 0) {
+        for (const projectId of foundUser.projects) {
+            const project = await ProjectModel.find({ _id: '' + projectId }).exec();
+            projects.push({
+                name: project[0].name,
+                id: project[0].id
+            })
+        }
+    }
+
     res.json({
         email: foundUser.email,
         name: `${foundUser.name} ${foundUser.surname}`,
-        profileImage: foundUser.userImage
+        profileImage: foundUser.userImage,
+        projects: projects
     });
 }
