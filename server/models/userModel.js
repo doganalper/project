@@ -24,7 +24,13 @@ const userSchema = new mongoose.Schema({
     userImage: {
         type: String,
         default: null
+    },
+    projects: {
+        type: [String],
+        defalt: []
     }
+}, {
+    collection: 'users'
 })
 
 module.exports = mongoose.model('User', userSchema);
