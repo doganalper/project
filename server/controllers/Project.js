@@ -30,3 +30,29 @@ exports.createProject = async (req, res) => {
         }
     }
 }
+
+exports.deleteProject = async (req, res) => {
+    const { projectId } = req.body;
+    const user = req.user;
+    if (!projectId) return res.status(400).json({ message: "Fields cannot be empty!" });
+    else {
+        try {
+            const deletedProject = await ProjectModel.deleteOne({ _id: projectId });
+            if (deletedProject.deletedCount !== 0) {
+                await UserModel.updateOne({ _id: user.id }, { $pullAll: { projects: [projectId] } });
+                return res.status(200).json({
+                    message: 'Deleted successfully!'
+                })
+            } else {
+                return res.status(400).json({
+                    message: 'Project could not be found!'
+                })
+            }
+        } catch (err) {
+            console.log(err);
+            return res.status(400).json({
+                message: 'There was an error!'
+            })
+        }
+    }
+}
