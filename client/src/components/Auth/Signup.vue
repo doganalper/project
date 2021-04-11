@@ -46,7 +46,7 @@ export default {
             try {
                 const response = await signup(this.userdata);
                 saveAuthToken(response.accessToken);
-                this.$router.push('/main-page');
+                this.$router.push('/');
             } catch (error) {
                 return (this.errorText = 'There was an error :(');
             }

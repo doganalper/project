@@ -3,12 +3,13 @@ const Mainpage = () => import('../views/MainPage.vue');
 
 const routes = [
     {
-        path: '/',
+        path: '/auth',
         component: Auth
     },
     {
-        path: '/main-page',
-        component: Mainpage
+        path: '/',
+        component: Mainpage,
+        children: []
     }
 ];
 

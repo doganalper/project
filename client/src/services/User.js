@@ -4,9 +4,10 @@ export const fetchUserData = () => {
     return new Promise((resolve, reject) => {
         Axios.get('/user/profile-me')
             .then((result) => {
-                resolve(result.data)
-            }).catch((err) => {
-                reject(err)
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
             });
     });
-}
+};

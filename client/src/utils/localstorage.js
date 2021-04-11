@@ -5,3 +5,7 @@ export const saveAuthToken = (token) => {
 export const getAccessToken = () => {
     return localStorage.getItem('authToken');
 };
+
+export const removeToken = () => {
+    localStorage.removeItem('authToken');
+};

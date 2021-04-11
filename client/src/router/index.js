@@ -11,10 +11,10 @@ const router = new VueRouter({
 
 // Access token check for non start pages.
 router.beforeEach((to, from, next) => {
-    if (to.fullPath !== '/') {
+    if (to.fullPath !== '/auth') {
         const token = getAccessToken();
         if (!token) {
-            next('/');
+            next('/auth');
         } else {
             next();
         }

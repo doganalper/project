@@ -1,6 +1,7 @@
 <template>
     <div class="mainpage flex-col" v-if="$store.state.userDataLoading === false">
         <Header :username="$store.state.userData.name" />
+        <router-view />
     </div>
 </template>
 

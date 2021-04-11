@@ -5,17 +5,25 @@
         </div>
         <div class="buttons-part flex-row">
             <div class="button">My Profile</div>
-            <div class="button">Logout</div>
+            <div class="button" @click="logout">Logout</div>
         </div>
     </div>
 </template>
 
 <script>
+import { removeToken } from '@/utils/localstorage.js';
+
 export default {
     props: {
         username: {
             type: String,
             required: true
+        }
+    },
+    methods: {
+        logout() {
+            removeToken();
+            this.$router.push('/auth');
         }
     }
 };
