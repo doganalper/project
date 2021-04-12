@@ -7,5 +7,5 @@ export const userDataLoading = (state, payload) => {
 };
 
 export const addToUserProjects = (state, payload) => {
-    state.userData.projects.push(payload)
-}
+    state.userData.projects.push(payload);
+};
