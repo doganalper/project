@@ -1,5 +1,6 @@
 const Auth = () => import('../views/AuthenticationPage.vue');
 const Mainpage = () => import('../views/MainPage.vue');
+const Projectspage = () => import('../views/ProjectsPage.vue');
 
 const routes = [
     {
@@ -9,7 +10,12 @@ const routes = [
     {
         path: '/',
         component: Mainpage,
-        children: []
+        children: [
+            {
+                path: '/',
+                component: Projectspage
+            }
+        ]
     }
 ];
 

@@ -1,6 +1,6 @@
 import Unicon from 'vue-unicons/dist/vue-unicons-vue2.umd';
-import { uniSignout } from 'vue-unicons/dist/icons';
+import { uniAngleDown, uniAngleUp, uniListUiAlt } from 'vue-unicons/dist/icons';
 
-Unicon.add([uniSignout]);
+Unicon.add([uniAngleDown, uniAngleUp, uniListUiAlt]);
 
 export default Unicon;
