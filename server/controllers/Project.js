@@ -56,3 +56,40 @@ exports.deleteProject = async (req, res) => {
         }
     }
 }
+
+exports.updateProject = async (req, res) => {
+    const { projectId } = req.params;
+    const {
+        name,
+        description
+    } = req.body;
+
+    if (!name && !description) return res.status(400).json({ message: "At least one of the fields should be filled!" });
+    else {
+        try {
+            const project = await ProjectModel.findById(projectId).exec();
+            const query = { _id: projectId };
+            const updateObject = {
+                $set: {
+                    name: name ? name : project.name,
+                    description: description ? description : project.description
+                }
+            }
+            ProjectModel.findOneAndUpdate(query, updateObject, { new: true }, (err, doc) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(400).json({ message: 'There was an error!' })
+                } else {
+                    return res.status(200).json({
+                        projectId: doc.id,
+                        description: doc.description,
+                        name: doc.name
+                    })
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'There was an error!' })
+        }
+    }
+}

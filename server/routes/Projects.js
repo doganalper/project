@@ -6,5 +6,6 @@ const { authenticateToken } = require('../utils/authFunctions');
 
 router.post('/create', authenticateToken, ProjectsController.createProject);
 router.delete('/delete', authenticateToken, ProjectsController.deleteProject);
+router.patch('/update/:projectId', authenticateToken, ProjectsController.updateProject);
 
 module.exports = router;
