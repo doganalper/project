@@ -1,9 +1,17 @@
 const mongoose = require('mongoose');
 
-const projectModel = new mongoose.Schema({
+const teamSchema = new mongoose.Schema({
+    projectId: {
+        type: String,
+        required: true
+    },
     name: {
         type: String,
         required: true
+    },
+    teamImg: {
+        type: String,
+        default: null
     },
     description: {
         type: String,
@@ -18,12 +26,8 @@ const projectModel = new mongoose.Schema({
         type: [String],
         default: []
     },
-    teams: {
+    stages: {
         type: [String],
         default: []
     }
-}, {
-    collection: 'projects'
 })
-
-module.exports = mongoose.model('Project', projectModel);
