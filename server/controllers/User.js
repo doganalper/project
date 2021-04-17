@@ -65,6 +65,7 @@ exports.getUser = async (req, res) => {
     }
 
     res.json({
+        userId: user.id,
         email: foundUser.email,
         name: `${foundUser.name} ${foundUser.surname}`,
         profileImage: foundUser.userImage,

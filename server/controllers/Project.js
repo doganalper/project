@@ -189,10 +189,14 @@ exports.getProjectDetails = async (req, res) => {
     const { projectId } = req.params;
 
     try {
+        const user = await UserModel.findById(userId).exec();
+        console.log(user);
         const project = await ProjectModel.findById(projectId).exec();
-        return res.status(200).json(project);
+        if (!user.projects.includes(`${projectId}`)) {
+            return res.status(401).json({ message: 'You cannot access this project details!' });
+        } else return res.status(200).json(project);
     } catch (error) {
-        console.log(project);
+        console.log(error);
         return res.status(400).json({ message: 'There was an error!' });
     }
 }

@@ -9,7 +9,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         userData: null,
-        userDataLoading: null
+        userDataLoading: null,
+        openProject: {
+            projectDetailLoading: null,
+            projectDetail: null
+        }
     },
     mutations,
     actions,

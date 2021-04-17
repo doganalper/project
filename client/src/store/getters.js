@@ -5,5 +5,5 @@ export const getFilteredProjects = (state) => {
     return {
         adminProjects,
         memberProjects
-    }
-}
+    };
+};

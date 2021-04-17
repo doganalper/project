@@ -13,3 +13,15 @@ export const createProject = (projectName) => {
             });
     });
 };
+
+export const fetchProjectDetail = (projectId) => {
+    return new Promise((resolve, reject) => {
+        Axios.get(`/projects/${projectId}`)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
