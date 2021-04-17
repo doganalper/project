@@ -93,3 +93,39 @@ exports.updateProject = async (req, res) => {
         }
     }
 }
+
+exports.addUserToProject = async (req, res) => {
+    const { projectId } = req.params;
+    const { userEmail } = req.body;
+    if (!userEmail) return res.status(400).json({ message: 'Fields cannot be empty!' });
+    else {
+        try {
+            const userArr = await UserModel.find({ email: userEmail });
+            if (userArr.length === 0) {
+                return res.status(404).json({ message: "Couldn't found user with this email!" })
+            } else {
+                const user = userArr[0];
+                console.log(user);
+                await UserModel.updateOne(
+                    { email: user.email },
+                    { $push: { projects: projectId } }
+                )
+
+                await ProjectModel.updateOne(
+                    { _id: projectId },
+                    { $push: { members: user.id } }
+                )
+
+                return res.status(200).json({ message: 'User added to project!' })
+            }
+
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'There was an error!' })
+        }
+    }
+}
+
+exports.deleteUserFromProject = async (req, res) => {
+
+}
