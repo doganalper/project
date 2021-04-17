@@ -7,6 +7,7 @@ const { authenticateToken } = require('../utils/authFunctions');
 router.post('/create', authenticateToken, ProjectsController.createProject);
 router.delete('/delete', authenticateToken, ProjectsController.deleteProject);
 router.patch('/update/:projectId', authenticateToken, ProjectsController.updateProject);
+router.patch('/setUserRole/:projectId', authenticateToken, ProjectsController.setUserRole);
 router.route('/user/:projectId')
     .post(authenticateToken, ProjectsController.addUserToProject)
     .delete(authenticateToken, ProjectsController.deleteUserFromProject)

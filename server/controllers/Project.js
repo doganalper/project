@@ -129,3 +129,32 @@ exports.addUserToProject = async (req, res) => {
 exports.deleteUserFromProject = async (req, res) => {
 
 }
+
+// Role kısmı 1 ve 2 olabilir: 1 (admin) 2 (member)
+exports.setUserRole = async (req, res) => {
+    const { projectId } = req.params;
+    const { userId, role } = req.body;
+
+    if (!userId || !role) return res.status(400).json({ message: 'Fields cannot be empty' });
+    else {
+        const project = await ProjectModel.findById(projectId).exec();
+        const user = await UserModel.findById(userId).exec();
+        if (role === 1 && !project.admins.includes(`${userId}`)) {
+            await ProjectModel.updateOne({ _id: projectId }, { $pullAll: { members: [userId] } });
+            await ProjectModel.updateOne(
+                { _id: projectId },
+                { $push: { admins: userId } }
+            )
+            return res.status(200).json({ message: 'User role successfully setted!' })
+        } else if (role === 2 && !project.members.includes(`${userId}`)) {
+            await ProjectModel.updateOne({ _id: projectId }, { $pullAll: { admins: [userId] } });
+            await ProjectModel.updateOne(
+                { _id: projectId },
+                { $push: { members: userId } }
+            )
+            return res.status(200).json({ message: 'User role successfully setted!' })
+        } else {
+            return res.status(400).json({ message: 'User already in this part for this project!' });
+        }
+    }
+}
