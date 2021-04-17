@@ -1,5 +1,6 @@
 const ProjectModel = require('../models/projectModel');
 const UserModel = require('../models/userModel');
+const TeamModel = require('../models/teamModel');
 
 exports.createProject = async (req, res) => {
     const { name } = req.body;
@@ -190,11 +191,14 @@ exports.getProjectDetails = async (req, res) => {
 
     try {
         const user = await UserModel.findById(userId).exec();
-        console.log(user);
         const project = await ProjectModel.findById(projectId).exec();
+        const projectTeams = await TeamModel.find({ projectId: projectId }).exec();
         if (!user.projects.includes(`${projectId}`)) {
             return res.status(401).json({ message: 'You cannot access this project details!' });
-        } else return res.status(200).json(project);
+        } else return res.status(200).json({
+            project,
+            teamsDetails: projectTeams
+        });
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: 'There was an error!' });

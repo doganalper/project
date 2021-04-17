@@ -12,7 +12,8 @@ export default new Vuex.Store({
         userDataLoading: null,
         openProject: {
             projectDetailLoading: null,
-            projectDetail: null
+            projectDetail: null,
+            teams: []
         }
     },
     mutations,
