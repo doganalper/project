@@ -183,3 +183,16 @@ exports.setUserRole = async (req, res) => {
         }
     }
 }
+
+exports.getProjectDetails = async (req, res) => {
+    const userId = req.user.id;
+    const { projectId } = req.params;
+
+    try {
+        const project = await ProjectModel.findById(projectId).exec();
+        return res.status(200).json(project);
+    } catch (error) {
+        console.log(project);
+        return res.status(400).json({ message: 'There was an error!' });
+    }
+}

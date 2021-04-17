@@ -4,6 +4,7 @@ const router = express.Router();
 const ProjectsController = require('../controllers/Project');
 const { authenticateToken } = require('../utils/authFunctions');
 
+router.get('/:projectId', authenticateToken, ProjectsController.getProjectDetails);
 router.post('/create', authenticateToken, ProjectsController.createProject);
 router.delete('/delete', authenticateToken, ProjectsController.deleteProject);
 router.patch('/update/:projectId', authenticateToken, ProjectsController.updateProject);
