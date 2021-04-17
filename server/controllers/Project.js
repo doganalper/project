@@ -126,8 +126,33 @@ exports.addUserToProject = async (req, res) => {
     }
 }
 
-exports.deleteUserFromProject = async (req, res) => {
+exports.removeUserFromProject = async (req, res) => {
+    const { projectId } = req.params;
+    const { userId } = req.body;
 
+    if (!userId) return res.status(400).json({ message: 'Fields cannot be empty!' });
+    else {
+        const project = await ProjectModel.findById(projectId).exec();
+        if (project.admins.includes(`${userId}`)) res.status(400).json({ message: 'You cannot remove other admins from projects!' });
+        if (!project.members.includes(userId)) res.status(404).json({ message: 'There is no one in this project with given user id!' })
+        else {
+            try {
+                await ProjectModel.updateOne({ _id: projectId }, { $pullAll: { members: [userId] } });
+                await UserModel.updateOne({ _id: userId }, { $pullAll: { projects: [projectId] } })
+                return res.status(200).json({
+                    message: 'User removed from project',
+                    project: {
+                        members: project.members,
+                        admins: project.admins
+                    },
+                    user: userId
+                });
+            } catch (error) {
+                console.log(error);
+                return res.status(400).json({ message: 'There was an error!' })
+            }
+        }
+    }
 }
 
 // Role kısmı 1 ve 2 olabilir: 1 (admin) 2 (member)

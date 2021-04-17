@@ -10,6 +10,6 @@ router.patch('/update/:projectId', authenticateToken, ProjectsController.updateP
 router.patch('/setUserRole/:projectId', authenticateToken, ProjectsController.setUserRole);
 router.route('/user/:projectId')
     .post(authenticateToken, ProjectsController.addUserToProject)
-    .delete(authenticateToken, ProjectsController.deleteUserFromProject)
+    .delete(authenticateToken, ProjectsController.removeUserFromProject)
 
 module.exports = router;
