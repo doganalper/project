@@ -25,3 +25,11 @@ export const setProjectDetail = (state, payload) => {
 export const setTeams = (state, payload) => {
     state.openProject.teams = payload;
 };
+
+export const setProjectMembers = (state, payload) => {
+    state.openProject.members = payload;
+};
+
+export const setAddUserErrorText = (state, payload) => {
+    state.openProject.membersErrorText = payload
+};

@@ -25,3 +25,17 @@ export const fetchProjectDetail = (projectId) => {
             });
     });
 };
+
+export const addUserToProject = (projectId, userEmail) => {
+    return new Promise((resolve, reject) => {
+        Axios.post(`/projects/user/${projectId}`, {
+            userEmail: userEmail
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+}

@@ -106,7 +106,6 @@ exports.addUserToProject = async (req, res) => {
                 return res.status(404).json({ message: "Couldn't found user with this email!" })
             } else {
                 const user = userArr[0];
-                console.log(user);
                 await UserModel.updateOne(
                     { email: user.email },
                     { $push: { projects: projectId } }
@@ -117,7 +116,9 @@ exports.addUserToProject = async (req, res) => {
                     { $push: { members: user.id } }
                 )
 
-                return res.status(200).json({ message: 'User added to project!' })
+                return res.status(200).json({
+                    info: user
+                })
             }
 
         } catch (error) {
@@ -192,13 +193,24 @@ exports.getProjectDetails = async (req, res) => {
     try {
         const user = await UserModel.findById(userId).exec();
         const project = await ProjectModel.findById(projectId).exec();
+        let members = project.admins.concat(project.members);
+        members = await Promise.all(members.map(async (member) => {
+            const memberInfo = await UserModel.findById(member).exec();
+            return {
+                info: memberInfo,
+                isAdmin: project.admins.includes(member)
+            };
+        }));
         const projectTeams = await TeamModel.find({ projectId: projectId }).exec();
         if (!user.projects.includes(`${projectId}`)) {
             return res.status(401).json({ message: 'You cannot access this project details!' });
-        } else return res.status(200).json({
-            project,
-            teamsDetails: projectTeams
-        });
+        } else {
+            return res.status(200).json({
+                project,
+                teamsDetails: projectTeams,
+                projectMembers: members
+            });
+        }
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: 'There was an error!' });
