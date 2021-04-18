@@ -4,13 +4,23 @@
             <span> Members </span>
         </div>
         <div class="members">
-            <b v-for="member in members" :key="member.id" class="members-container">
-                <div class="firstsDiv screen-center">
-                    {{ getNameFirsts(member.info.name, member.info.surname) }}
+            <b v-for="member in members" :key="member.info.id" class="members-container">
+                <div>
+                    <div class="firstsDiv screen-center">
+                        {{ getNameFirsts(member.info.name, member.info.surname) }}
+                    </div>
+                    {{ getName(member.info.name, member.info.surname) }}
                 </div>
-                {{ getName(member.info.name, member.info.surname) }}
-                <!-- <unicon name="constructor" fill="royalblue" /> -->
+                <unicon
+                    name="user-times"
+                    fill="red"
+                    class="remove-icon"
+                    @click="removeUser(member.info._id)"
+                />
             </b>
+            <span v-if="removeUserError !== null" class="removeErrorText">
+                {{ removeUserError }}
+            </span>
         </div>
         <div class="add-member flex-col">
             <input type="email" placeholder="User mail" v-model="emailOfMember" />
@@ -26,7 +36,8 @@
 export default {
     data() {
         return {
-            emailOfMember: null
+            emailOfMember: null,
+            removeUserError: null
         };
     },
     props: {
@@ -45,11 +56,28 @@ export default {
             return `${first}${second}`;
         },
         addUser() {
+            this.removeUserError = null;
             this.$store.commit('setAddUserErrorText', null);
-            if (!this.emailOfMember) {
+            if (!this.validateEmail(this.emailOfMember)) {
                 return this.$store.commit('setAddUserErrorText', 'You have to enter mail address');
             }
             this.$store.dispatch('addUserToProjectAction', this.emailOfMember);
+            this.emailOfMember = null;
+        },
+        validateEmail(email) {
+            const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        },
+        removeUser(userId) {
+            this.removeUserError = null;
+            const isUserAdmin = this.$store.state.openProject.members.find(
+                (member) => member.info._id === userId
+            ).isAdmin;
+            if (userId !== this.$store.state.userData.userId || !isUserAdmin) {
+                return this.$store.dispatch('removeUserFromProjectAction', userId);
+            } else {
+                this.removeUserError = "You can't delete this user!";
+            }
         }
     }
 };
@@ -78,10 +106,17 @@ export default {
             display: flex;
             flex-flow: row;
             align-items: center;
+            justify-content: space-between;
             width: 90%;
             border: 1px solid lightgray;
             margin-top: 1rem;
             padding: 0.7rem;
+
+            div {
+                display: flex;
+                flex-flow: row;
+                align-items: center;
+            }
 
             .firstsDiv {
                 background: lightblue;
@@ -93,6 +128,14 @@ export default {
                 font-size: 0.8rem;
                 margin-right: 0.5rem;
             }
+
+            .remove-icon {
+                cursor: pointer;
+            }
+        }
+
+        .removeErrorText {
+            margin-top: 1rem;
         }
     }
 

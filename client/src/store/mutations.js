@@ -31,5 +31,5 @@ export const setProjectMembers = (state, payload) => {
 };
 
 export const setAddUserErrorText = (state, payload) => {
-    state.openProject.membersErrorText = payload
+    state.openProject.membersErrorText = payload;
 };

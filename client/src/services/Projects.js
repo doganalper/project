@@ -38,4 +38,18 @@ export const addUserToProject = (projectId, userEmail) => {
                 reject(err);
             });
     });
+};
+
+export const removeUserFromProject = (projectId, userId) => {
+    return new Promise((resolve, reject) => {
+        Axios.patch(`/projects/user/${projectId}`, {
+            userId: userId
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
 }
