@@ -1,6 +1,8 @@
 <template>
     <div class="teams">
-        {{ $store.state.openProject.teams.length }}
+        <div v-for="team in teams" :key="team._id">
+            {{ team.name }}
+        </div>
     </div>
 </template>
 

@@ -1,10 +1,8 @@
 <template>
     <div class="no-team screen-center flex-col">
         <img src="/svg/searching.svg" />
-        <span class="no-team-text">
-            Looks like you don't have any teams. <b>Create one now!</b>
-        </span>
-        <div class="create-team flex-col">
+        <span class="no-team-text"> Looks like you don't have any teams. </span>
+        <div class="create-team flex-col" v-if="$store.state.userData.isAdmin">
             <div v-if="showCreateInput" class="flex-col">
                 <input v-if="!errorText" type="text" v-model="createdTeamName" class="team-input" />
                 <span v-if="errorText">{{ errorText }}</span>
@@ -40,7 +38,7 @@ export default {
         display: flex;
         flex-flow: column;
         align-items: center;
-        margin: 1rem 0;
+        font-size: 1.1rem;
     }
 
     .create-team {

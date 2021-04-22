@@ -37,3 +37,8 @@ export const setAddUserErrorText = (state, payload) => {
 export const addToProjectTeams = (state, payload) => {
     state.openProject.teams.push(payload);
 };
+
+export const changeProjectDetail = (state, changedDetail) => {
+    state.openProject.projectDetail.name = changedDetail.name;
+    state.openProject.projectDetail.description = changedDetail.description;
+}

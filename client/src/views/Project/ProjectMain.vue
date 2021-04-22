@@ -1,18 +1,13 @@
 <template>
-    <div class="project-main">
-        <!-- Project Header -->
-        <div class="project-main-header">
-            <b>Proje:</b> {{ $store.state.openProject.projectDetail.name }}
-        </div>
-        <!-- Project Teams -->
-        <!-- TODO: Change this part for creating new teams and routing to team main page -->
+    <div class="project-main flex-col">
+        <ProjectHeader />
         <div class="flex-row">
             <Members :members="$store.state.openProject.members" />
             <NoTeamHolder
                 @createTeam="createTeam"
                 v-if="this.$store.state.openProject.teams.length === 0"
             />
-            <TeamsHolder v-else :teams="teams" />
+            <TeamsHolder v-else :teams="this.$store.state.openProject.teams" />
         </div>
     </div>
 </template>
@@ -21,13 +16,15 @@
 import Members from '@/components/Projects/Project/MembersDiv.vue';
 import NoTeamHolder from '@/components/Teams/NoTeam.vue';
 import TeamsHolder from '@/components/Teams/TeamsSection.vue';
+import ProjectHeader from '@/components/Projects/ProjectHeader.vue';
 import { createTeam } from '@/services/Teams.js';
 
 export default {
     components: {
         Members,
         NoTeamHolder,
-        TeamsHolder
+        TeamsHolder,
+        ProjectHeader
     },
     data() {
         return {
@@ -57,17 +54,3 @@ export default {
     }
 };
 </script>
-
-<style lang="scss">
-.project-main {
-    display: flex;
-    flex-flow: column;
-
-    &-header {
-        background-color: rgb(247, 247, 247);
-        border-bottom: 1px solid lightgray;
-        padding: 0.8rem 1.2rem;
-        font-size: 0.9rem;
-    }
-}
-</style>

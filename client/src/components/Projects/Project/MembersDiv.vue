@@ -13,16 +13,18 @@
                 </div>
                 <unicon
                     name="user-times"
-                    fill="red"
+                    fill="lightsalmon"
                     class="remove-icon"
+                    width="20"
                     @click="removeUser(member.info._id)"
+                    v-if="$store.state.userData.isAdmin"
                 />
             </b>
             <span v-if="removeUserError !== null" class="removeErrorText">
                 {{ removeUserError }}
             </span>
         </div>
-        <div class="add-member flex-col">
+        <div class="add-member flex-col" v-if="$store.state.userData.isAdmin">
             <input type="email" placeholder="User mail" v-model="emailOfMember" />
             <span v-if="$store.state.openProject.membersErrorText !== null">
                 {{ $store.state.openProject.membersErrorText }}
@@ -56,13 +58,25 @@ export default {
             return `${first}${second}`;
         },
         addUser() {
-            this.removeUserError = null;
-            this.$store.commit('setAddUserErrorText', null);
-            if (!this.validateEmail(this.emailOfMember)) {
-                return this.$store.commit('setAddUserErrorText', 'You have to enter mail address');
+            const doesUserInProject = this.checkUserinProject(this.emailOfMember);
+            if (!doesUserInProject) {
+                this.removeUserError = null;
+                this.$store.commit('setAddUserErrorText', null);
+                if (!this.validateEmail(this.emailOfMember)) {
+                    return this.$store.commit(
+                        'setAddUserErrorText',
+                        'You have to enter mail address'
+                    );
+                }
+                this.$store.dispatch('addUserToProjectAction', this.emailOfMember);
+                this.emailOfMember = null;
             }
-            this.$store.dispatch('addUserToProjectAction', this.emailOfMember);
-            this.emailOfMember = null;
+        },
+        checkUserinProject(mail) {
+            const isUserInProject = this.$store.state.openProject.members.filter(
+                (member) => member.info.email === mail
+            );
+            return isUserInProject.length !== 0;
         },
         validateEmail(email) {
             const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

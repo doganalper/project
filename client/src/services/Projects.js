@@ -53,3 +53,22 @@ export const removeUserFromProject = (projectId, userId) => {
             });
     });
 };
+
+export const changeProjectDetail = (projectId, newDetails) => {
+    const detailPayload = {};
+    if (newDetails.name) {
+        detailPayload['name'] = newDetails.name;
+    }
+    if (newDetails.description) {
+        detailPayload['description'] = newDetails.description;
+    }
+    return new Promise((resolve, reject) => {
+        Axios.patch(`/projects/update/${projectId}`, detailPayload)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+}
