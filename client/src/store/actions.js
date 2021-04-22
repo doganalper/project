@@ -1,5 +1,9 @@
 import { fetchUserData } from '@/services/User.js';
-import { fetchProjectDetail, addUserToProject, removeUserFromProject } from '@/services/Projects.js';
+import {
+    fetchProjectDetail,
+    addUserToProject,
+    removeUserFromProject
+} from '@/services/Projects.js';
 
 export const getUserData = async ({ commit }) => {
     commit('userDataLoading', true);
@@ -52,4 +56,4 @@ export const removeUserFromProjectAction = async ({ commit, state }, userId) => 
     await removeUserFromProject(state.openProject.projectDetail._id, userId);
     const newArr = state.openProject.members.filter((member) => member.info._id !== userId);
     commit('setProjectMembers', newArr);
-}
+};

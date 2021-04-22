@@ -86,7 +86,7 @@ export default {
 <style lang="scss">
 .members-div {
     padding: 2rem;
-    width: 25%;
+    width: 20%;
     height: 100vmin;
     border-right: 1px solid lightgray;
 

@@ -52,4 +52,4 @@ export const removeUserFromProject = (projectId, userId) => {
                 reject(err);
             });
     });
-}
+};

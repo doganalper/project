@@ -33,3 +33,7 @@ export const setProjectMembers = (state, payload) => {
 export const setAddUserErrorText = (state, payload) => {
     state.openProject.membersErrorText = payload;
 };
+
+export const addToProjectTeams = (state, payload) => {
+    state.openProject.teams.push(payload);
+};
