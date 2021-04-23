@@ -71,4 +71,16 @@ export const changeProjectDetail = (projectId, newDetails) => {
                 reject(err);
             });
     });
+};
+
+export const deleteProject = (projectId) => {
+    return new Promise((resolve, reject) => {
+        Axios.delete(`/projects/delete/${projectId}`)
+            .then((result) => {
+                resolve(result);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
 }

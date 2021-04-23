@@ -18,6 +18,11 @@ export const projectDetailLoading = (state, payload) => {
     state.openProject.projectDetailLoading = payload;
 };
 
+export const removeProject = (state, projectId) => {
+    const projectsArr = state.userData.projects.filter((project) => project.id !== projectId);
+    state.userData.projects = projectsArr;
+}
+
 export const setProjectDetail = (state, payload) => {
     state.openProject.projectDetail = payload;
 };
@@ -41,4 +46,4 @@ export const addToProjectTeams = (state, payload) => {
 export const changeProjectDetail = (state, changedDetail) => {
     state.openProject.projectDetail.name = changedDetail.name;
     state.openProject.projectDetail.description = changedDetail.description;
-}
+};

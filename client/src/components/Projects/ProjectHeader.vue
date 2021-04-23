@@ -116,6 +116,11 @@ export default {
         display: flex;
         align-items: center;
 
+        div {
+            display: flex;
+            align-items: center;
+        }
+
         span {
             margin-left: 0.5rem;
         }

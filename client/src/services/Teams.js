@@ -12,4 +12,4 @@ export const createTeam = (teamName, projectId) => {
                 reject(err);
             });
     });
-}
+};

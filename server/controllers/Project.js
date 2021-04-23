@@ -33,7 +33,7 @@ exports.createProject = async (req, res) => {
 }
 
 exports.deleteProject = async (req, res) => {
-    const { projectId } = req.body;
+    const { projectId } = req.params;
     const user = req.user;
     if (!projectId) return res.status(400).json({ message: "Fields cannot be empty!" });
     else {
@@ -42,7 +42,8 @@ exports.deleteProject = async (req, res) => {
             if (deletedProject.deletedCount !== 0) {
                 await UserModel.updateOne({ _id: user.id }, { $pullAll: { projects: [projectId] } });
                 return res.status(200).json({
-                    message: 'Deleted successfully!'
+                    message: 'Deleted successfully!',
+                    projectId: projectId
                 })
             } else {
                 return res.status(400).json({

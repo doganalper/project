@@ -1,6 +1,11 @@
 <template>
     <div class="teams">
-        <div v-for="team in teams" :key="team._id">
+        <div v-for="team in teams" :key="team._id" class="team-div">
+            <img
+                :src="generateImg(teams.teamImg)"
+                class="team-div-img"
+                @click="goToTeam(team._id)"
+            />
             {{ team.name }}
         </div>
     </div>
@@ -13,6 +18,14 @@ export default {
             type: Array,
             required: true
         }
+    },
+    methods: {
+        generateImg(img) {
+            return img ? img : '/team-placeholder.png';
+        },
+        goToTeam(teamId) {
+            this.$router.push(`/team/${teamId}`);
+        }
     }
 };
 </script>
@@ -20,5 +33,30 @@ export default {
 <style lang="scss">
 .teams {
     width: 80%;
+    padding: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    .team-div {
+        margin-left: 4rem;
+        height: max-content;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+
+        &-img {
+            width: 12rem;
+        }
+
+        &:first-of-type {
+            margin-left: 0;
+        }
+
+        &:hover {
+            cursor: pointer;
+            transform: scaleX(1.05) scaleY(1.05);
+            transition: 0.2s ease-in-out;
+        }
+    }
 }
 </style>

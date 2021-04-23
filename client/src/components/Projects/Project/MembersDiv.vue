@@ -31,10 +31,15 @@
             </span>
             <button @click="addUser">Add User</button>
         </div>
+        <div class="delete-project" v-if="$store.state.userData.isAdmin">
+            <button @click="deleteProject">Delete Project</button>
+        </div>
     </div>
 </template>
 
 <script>
+import { deleteProject } from '@/services/Projects.js';
+
 export default {
     data() {
         return {
@@ -91,6 +96,13 @@ export default {
                 return this.$store.dispatch('removeUserFromProjectAction', userId);
             } else {
                 this.removeUserError = "You can't delete this user!";
+            }
+        },
+        async deleteProject() {
+            const response = await deleteProject(this.$store.state.openProject.projectDetail._id);
+            if (response.status === 200) {
+                this.$store.commit('removeProject', response.data.projectId);
+                this.$router.push('/');
             }
         }
     }
@@ -173,6 +185,23 @@ export default {
             padding: 0.3rem;
             background-color: rgb(207, 247, 148);
             font-size: 0.8rem;
+            cursor: pointer;
+        }
+    }
+
+    .delete-project {
+        position: fixed;
+        bottom: 0;
+        width: 20%;
+        margin: 0 -2rem;
+
+        button {
+            width: 100%;
+            font-size: 0.8rem;
+            border: none;
+            background: lightsalmon;
+            padding: 0.4rem 0;
+            font-weight: 600;
             cursor: pointer;
         }
     }
