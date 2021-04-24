@@ -39,7 +39,6 @@ export default {
     align-content: flex-start;
 
     .team-div {
-        border: 1px solid black;
         margin: 0 0 4rem 2rem;
         height: max-content;
         display: flex;
