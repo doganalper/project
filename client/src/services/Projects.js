@@ -83,4 +83,4 @@ export const deleteProject = (projectId) => {
                 reject(err);
             });
     });
-}
+};

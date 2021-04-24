@@ -107,16 +107,18 @@ export default {
                     {
                         title: 'Cancel',
                         handler: () => {
-                            this.$modal.hide('dialog')
+                            this.$modal.hide('dialog');
                         }
                     },
                     {
                         title: 'Delete',
                         class: 'delete-project-button',
                         handler: async () => {
-                            const response = await deleteProject(this.$store.state.openProject.projectDetail._id);
+                            const response = await deleteProject(
+                                this.$store.state.openProject.projectDetail._id
+                            );
                             if (response.status === 200) {
-                                this.$modal.hide('dialog')
+                                this.$modal.hide('dialog');
                                 this.$store.commit('removeProject', response.data.projectId);
                                 this.$router.push('/');
                             }

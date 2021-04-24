@@ -21,7 +21,7 @@ export const projectDetailLoading = (state, payload) => {
 export const removeProject = (state, projectId) => {
     const projectsArr = state.userData.projects.filter((project) => project.id !== projectId);
     state.userData.projects = projectsArr;
-}
+};
 
 export const setProjectDetail = (state, payload) => {
     state.openProject.projectDetail = payload;
