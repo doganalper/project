@@ -21,6 +21,17 @@
                 />
             </div>
         </div>
+        <div
+            v-if="$store.state.userData.isAdmin && this.$store.state.openProject.teams.length !== 0"
+            class="project-header-create"
+        >
+            <input
+                type="text"
+                v-model="createdTeamName"
+                placeholder="Press enter to create team"
+                @keyup.enter="createTeam"
+            />
+        </div>
         <div class="project-header-description">
             <div v-if="$store.state.userData.isAdmin">
                 <unicon
@@ -56,7 +67,8 @@ export default {
             isRenameOpen: false,
             newProjectName: null,
             isDescriptionOpen: false,
-            newDescription: null
+            newDescription: null,
+            createdTeamName: null
         };
     },
     methods: {
@@ -79,6 +91,9 @@ export default {
             );
             console.log(newDetail);
             this.$store.commit('changeProjectDetail', newDetail);
+        },
+        createTeam() {
+            if (this.createdTeamName) this.$emit('createTeam', this.createdTeamName);
         }
     },
     computed: {

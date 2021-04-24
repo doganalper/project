@@ -32,8 +32,9 @@
             <button @click="addUser">Add User</button>
         </div>
         <div class="delete-project" v-if="$store.state.userData.isAdmin">
-            <button @click="deleteProject">Delete Project</button>
+            <button @click="deleteProject" class="delete-project-button">Delete Project</button>
         </div>
+        <v-dialog />
     </div>
 </template>
 
@@ -98,12 +99,31 @@ export default {
                 this.removeUserError = "You can't delete this user!";
             }
         },
-        async deleteProject() {
-            const response = await deleteProject(this.$store.state.openProject.projectDetail._id);
-            if (response.status === 200) {
-                this.$store.commit('removeProject', response.data.projectId);
-                this.$router.push('/');
-            }
+        deleteProject() {
+            this.$modal.show('dialog', {
+                title: 'Do you want to delete this project?',
+                text: 'This project will be deleted without any possibility to return!',
+                buttons: [
+                    {
+                        title: 'Cancel',
+                        handler: () => {
+                            this.$modal.hide('dialog')
+                        }
+                    },
+                    {
+                        title: 'Delete',
+                        class: 'delete-project-button',
+                        handler: async () => {
+                            const response = await deleteProject(this.$store.state.openProject.projectDetail._id);
+                            if (response.status === 200) {
+                                this.$modal.hide('dialog')
+                                this.$store.commit('removeProject', response.data.projectId);
+                                this.$router.push('/');
+                            }
+                        }
+                    }
+                ]
+            });
         }
     }
 };
@@ -195,7 +215,7 @@ export default {
         width: 20%;
         margin: 0 -2rem;
 
-        button {
+        &-button {
             width: 100%;
             font-size: 0.8rem;
             border: none;

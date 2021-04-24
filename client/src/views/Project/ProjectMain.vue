@@ -1,6 +1,6 @@
 <template>
     <div class="project-main flex-col">
-        <ProjectHeader />
+        <ProjectHeader @createTeam="createTeam" />
         <div class="flex-row">
             <Members :members="$store.state.openProject.members" />
             <NoTeamHolder
@@ -40,7 +40,7 @@ export default {
                 );
                 this.$store.commit('addToProjectTeams', {
                     name: response.name,
-                    id: response.project_id,
+                    _id: response.project_id,
                     status: 'admin'
                 });
             } catch (err) {
