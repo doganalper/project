@@ -36,9 +36,11 @@ export default {
     padding: 5rem;
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
 
     .team-div {
-        margin-left: 4rem;
+        border: 1px solid black;
+        margin: 0 0 4rem 2rem;
         height: max-content;
         display: flex;
         flex-flow: column;
@@ -46,10 +48,6 @@ export default {
 
         &-img {
             width: 12rem;
-        }
-
-        &:first-of-type {
-            margin-left: 0;
         }
 
         &:hover {
