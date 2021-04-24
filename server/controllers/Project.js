@@ -41,7 +41,8 @@ exports.deleteProject = async (req, res) => {
             const deletedProject = await ProjectModel.deleteOne({ _id: projectId });
             if (deletedProject.deletedCount !== 0) {
                 await UserModel.updateOne({ _id: user.id }, { $pullAll: { projects: [projectId] } });
-                await TeamModel.findOneAndDelete({projectId: projectId});
+                /* await TeamModel.findOneAndDelete({projectId: projectId}); */
+                await TeamModel.deleteMany({ projectId: projectId });
                 return res.status(200).json({
                     message: 'Deleted successfully!',
                     projectId: projectId

@@ -94,6 +94,7 @@ export default {
         },
         createTeam() {
             if (this.createdTeamName) this.$emit('createTeam', this.createdTeamName);
+            this.createdTeamName = null;
         }
     },
     computed: {
