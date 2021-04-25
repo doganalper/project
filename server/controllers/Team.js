@@ -103,7 +103,7 @@ exports.getTeamDetail = async (req, res) => {
     const { teamId } = req.params;
     try {
         const teamDetail = await TeamModel.findById(teamId).exec();
-        console.log(teamDetail);
+        return res.status(200).json(teamDetail);
     } catch (err) {
         console.log(err);
         return res.status(400).json({ message: 'There was an error!' })

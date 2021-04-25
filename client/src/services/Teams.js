@@ -13,3 +13,15 @@ export const createTeam = (teamName, projectId) => {
             });
     });
 };
+
+export const getTeamDetail = (teamId) => {
+    return new Promise((resolve, reject) => {
+        Axios.get(`/teams/${teamId}`)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    })
+}

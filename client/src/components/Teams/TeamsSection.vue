@@ -24,7 +24,7 @@ export default {
             return img ? img : '/team-placeholder.png';
         },
         goToTeam(teamId) {
-            this.$router.push(`/team/${teamId}`);
+            this.$router.push(`${this.$router.currentRoute.path}/team/${teamId}`);
         }
     }
 };
