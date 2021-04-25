@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 
 const userRoutes = require('./routes/User');
 const projectRoutes = require('./routes/Projects');
+const teamRoutes = require('./routes/Teams');
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use(cors());
 // URLS
 app.use('/user', userRoutes);
 app.use('/projects', projectRoutes);
+app.use('/teams', teamRoutes);
 
 app.listen(3000)

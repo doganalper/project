@@ -1,5 +1,6 @@
 const ProjectModel = require('../models/projectModel');
 const UserModel = require('../models/userModel');
+const TeamModel = require('../models/teamModel');
 
 exports.createProject = async (req, res) => {
     const { name } = req.body;
@@ -32,7 +33,7 @@ exports.createProject = async (req, res) => {
 }
 
 exports.deleteProject = async (req, res) => {
-    const { projectId } = req.body;
+    const { projectId } = req.params;
     const user = req.user;
     if (!projectId) return res.status(400).json({ message: "Fields cannot be empty!" });
     else {
@@ -40,8 +41,11 @@ exports.deleteProject = async (req, res) => {
             const deletedProject = await ProjectModel.deleteOne({ _id: projectId });
             if (deletedProject.deletedCount !== 0) {
                 await UserModel.updateOne({ _id: user.id }, { $pullAll: { projects: [projectId] } });
+                /* await TeamModel.findOneAndDelete({projectId: projectId}); */
+                await TeamModel.deleteMany({ projectId: projectId });
                 return res.status(200).json({
-                    message: 'Deleted successfully!'
+                    message: 'Deleted successfully!',
+                    projectId: projectId
                 })
             } else {
                 return res.status(400).json({
@@ -105,7 +109,6 @@ exports.addUserToProject = async (req, res) => {
                 return res.status(404).json({ message: "Couldn't found user with this email!" })
             } else {
                 const user = userArr[0];
-                console.log(user);
                 await UserModel.updateOne(
                     { email: user.email },
                     { $push: { projects: projectId } }
@@ -116,7 +119,9 @@ exports.addUserToProject = async (req, res) => {
                     { $push: { members: user.id } }
                 )
 
-                return res.status(200).json({ message: 'User added to project!' })
+                return res.status(200).json({
+                    info: user
+                })
             }
 
         } catch (error) {
@@ -189,10 +194,28 @@ exports.getProjectDetails = async (req, res) => {
     const { projectId } = req.params;
 
     try {
+        const user = await UserModel.findById(userId).exec();
         const project = await ProjectModel.findById(projectId).exec();
-        return res.status(200).json(project);
+        let members = project.admins.concat(project.members);
+        members = await Promise.all(members.map(async (member) => {
+            const memberInfo = await UserModel.findById(member).exec();
+            return {
+                info: memberInfo,
+                isAdmin: project.admins.includes(member)
+            };
+        }));
+        const projectTeams = await TeamModel.find({ projectId: projectId }).exec();
+        if (!user.projects.includes(`${projectId}`)) {
+            return res.status(401).json({ message: 'You cannot access this project details!' });
+        } else {
+            return res.status(200).json({
+                project,
+                teamsDetails: projectTeams,
+                projectMembers: members
+            });
+        }
     } catch (error) {
-        console.log(project);
+        console.log(error);
         return res.status(400).json({ message: 'There was an error!' });
     }
 }

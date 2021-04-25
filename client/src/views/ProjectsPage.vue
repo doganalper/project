@@ -32,6 +32,9 @@ export default {
                 this.createdProjectName = null;
             }
         }
+    },
+    mounted() {
+        this.$store.commit('setProjectDetail', null);
     }
 };
 </script>

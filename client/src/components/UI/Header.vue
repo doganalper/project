@@ -4,7 +4,7 @@
             {{ username }}
         </div>
         <div class="buttons-part flex-row">
-            <div class="button">My Profile</div>
+            <div class="button" @click="routeToMain">My Profile</div>
             <div class="button" @click="logout">Logout</div>
         </div>
     </div>
@@ -24,6 +24,10 @@ export default {
         logout() {
             removeToken();
             this.$router.push('/auth');
+        },
+        //TODO: Change this with user page
+        routeToMain() {
+            this.$router.push('/');
         }
     }
 };

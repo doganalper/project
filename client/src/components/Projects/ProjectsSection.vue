@@ -11,6 +11,7 @@
                         v-for="project in filteredProjects.adminProjects"
                         :key="project.id"
                         class="project-frame"
+                        @click="routeToProject(project.id)"
                     >
                         <div class="project-frame-picture screen-center">
                             <!-- TODO: check if project has image setted -->
@@ -33,6 +34,7 @@
                         v-for="project in filteredProjects.memberProjects"
                         :key="project.id"
                         class="project-frame"
+                        @click="routeToProject(project.id)"
                     >
                         <div class="project-frame-picture screen-center">
                             <!-- TODO: check if project has image setted -->
@@ -77,6 +79,9 @@ export default {
                 this.$emit('createProject', this.newProjectName);
                 this.newProjectName = null;
             }
+        },
+        routeToProject(projectId) {
+            this.$router.push(`/project/${projectId}`);
         }
     },
     computed: {
