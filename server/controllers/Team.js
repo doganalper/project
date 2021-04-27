@@ -109,3 +109,27 @@ exports.getTeamDetail = async (req, res) => {
         return res.status(400).json({ message: 'There was an error!' })
     }
 }
+
+exports.addUserToTeam = async (req, res) => {
+    const { teamId } = req.params;
+    const { userId } = req.body;
+
+    if (!userId) return res.status(400).json({ message: 'Fields cannot be empty!' })
+    try {
+        const projectDetail = await ProjectModel.findOne({ teams: { $all: [teamId] } });
+        if (!projectDetail.members.includes(userId) && !projectDetail.admins.includes(userId)) {
+            return res.status(401).json({ message: 'You cannot do that!' })
+        } else {
+            const user = await UserModel.findById(userId);
+            await TeamModel.updateOne(
+                { _id: teamId },
+                { $push: { members: user._id } }
+            )
+            const team = await TeamModel.findById(teamId);
+            return res.status(200).json(team)
+        }
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: 'There was an error!' })
+    }
+}

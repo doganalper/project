@@ -61,7 +61,7 @@ export const removeUserFromProjectAction = async ({ commit, state }, userId) => 
 
 export const geTeamDetails = async ({ commit, state }, teamId) => {
     commit('setTeamLoading', true);
-    commit('setTeamDetail', null)
+    commit('setTeamDetail', null);
     const teamDetail = await getTeamDetail(teamId);
     if (!teamDetail) {
         commit('setTeamLoading', true);
@@ -71,7 +71,7 @@ export const geTeamDetails = async ({ commit, state }, teamId) => {
         } else {
             commit('setIfUserTeamAdmin', false);
         }
-        commit('setTeamDetail', teamDetail)
+        commit('setTeamDetail', teamDetail);
         commit('setTeamLoading', false);
     }
-}
+};

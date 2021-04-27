@@ -9,5 +9,6 @@ router.route('/:teamId')
     .delete(authenticateToken, TeamsController.deleteTeam)
     .patch(authenticateToken, TeamsController.updateTeam)
     .get(authenticateToken, TeamsController.getTeamDetail)
+router.post('/:teamId/add', authenticateToken, TeamsController.addUserToTeam)
 
 module.exports = router;

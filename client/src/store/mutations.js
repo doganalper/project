@@ -59,3 +59,8 @@ export const setTeamDetail = (state, teamDetail) => {
 export const setIfUserTeamAdmin = (state, isAdmin) => {
     state.openTeam.isAdmin = isAdmin;
 };
+
+export const changeTeamDetail = (state, changedDetail) => {
+    state.openTeam.teamDetail.name = changedDetail.name;
+    state.openTeam.teamDetail.description = changedDetail.description;
+}
