@@ -133,3 +133,15 @@ exports.addUserToTeam = async (req, res) => {
         return res.status(400).json({ message: 'There was an error!' })
     }
 }
+
+exports.removeUserFromTeam = async (req,res) => {
+    const { teamId } = req.params;
+    const { userId } = req.body;
+    
+    if (!userId) return res.status(400).json({ message: 'Fields cannot be empty!' })
+    else {
+        await TeamModel.updateOne({ _id: teamId }, { $pullAll: { members: [userId] } });
+        const teamDetail = TeamModel.findById(teamId).exec();
+        return res.status(200).json(teamDetail);
+    }
+}
