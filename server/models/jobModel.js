@@ -9,7 +9,11 @@ const jobModel = new mongoose.Schema({
         type: String,
         required: true
     },
-    assigned: {
+    description: {
+        type: 'String',
+        default: null
+    },
+    assignedId: {
         type: String,
         default: null
     },
@@ -18,6 +22,14 @@ const jobModel = new mongoose.Schema({
         default: null
     },
     subWorks: {
+        type: Array,
+        default: []
+    },
+    isFinished: {
+        type: Boolean,
+        default: false
+    },
+    comments: {
         type: Array,
         default: []
     }
