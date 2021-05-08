@@ -1,5 +1,6 @@
 const StageModel = require('../models/stageModel');
 const JobModel = require('../models/jobModel');
+const SubJobModel = require('../models/subJobModel');
 
 exports.createJob = async (req, res) => {
     const {stageId} = req.params;
@@ -133,7 +134,6 @@ exports.updateJobInfo = async (req, res) => {
             if (err) {
                 return res.status(400).json({message: 'There was an error!'})
             } else {
-                console.log(doc);
                 return res.status(200).json({
                     jobId: jobId,
                     description: doc.description,
@@ -157,3 +157,61 @@ exports.setDueDate = async (req,res) => {
         })
     }
 };
+
+exports.addSubJob = async (req,res) => {
+    const {jobId, subJobName} = req.body;
+    if (!jobId || !subJobName) return res.status(400).json({message: 'Fields must not be empty!'})
+    else {
+        const createdSubJob = await SubJobModel.create({
+            jobId: jobId,
+            name: subJobName
+        });
+        await JobModel.updateOne({_id: jobId}, {
+            $push: {subWorks: createdSubJob.id}
+        })
+        return res.status(200).json({
+            created: createdSubJob
+        })
+    }
+}
+
+exports.removeSubJob = async (req, res) => {
+    const {subJobId} = req.params;
+    try {
+        const deletedSubJob = await SubJobModel.findById(subJobId).exec();
+        const isDeleted = await SubJobModel.deleteOne({_id: subJobId});
+
+        if (isDeleted.deletedCount !== 0) {
+            await JobModel.updateOne({_id: deletedSubJob.jobId}, {
+                $pullAll: {subWorks: [subJobId]}
+            })
+            return res.status(200).json({
+                message: 'Job deleted',
+                subJobId: subJobId
+            })
+        } else {
+            return res.status(400).json({
+                aaa: "aaa",
+                message: 'There was an error'
+            })
+        }
+    } catch (err) {
+        return res.status(400).json({
+            message: 'There was an error'
+        })
+    }
+}
+
+exports.changeSubJobStatus = async (req,res) => {
+    const {subJobId, status} = req.body;
+    if (!subJobId) return res.status(400).json({message: 'Fields cannot be empty!'})
+    else {
+        await SubJobModel.updateOne({_id: subJobId}, {
+            isFinished: status
+        })
+        return res.status(200).json({
+            message: 'Status changed',
+            isJobFinished: status
+        })
+    }
+}
