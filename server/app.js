@@ -6,6 +6,8 @@ const dotenv = require('dotenv').config();
 const userRoutes = require('./routes/User');
 const projectRoutes = require('./routes/Projects');
 const teamRoutes = require('./routes/Teams');
+const stageRoutes = require('./routes/Stages');
+const jobRoutes = require('./routes/Jobs');
 
 const app = express();
 
@@ -17,5 +19,7 @@ app.use(cors());
 app.use('/user', userRoutes);
 app.use('/projects', projectRoutes);
 app.use('/teams', teamRoutes);
+app.use('/stage', stageRoutes);
+app.use('/job', jobRoutes);
 
 app.listen(3000)

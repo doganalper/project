@@ -4,9 +4,10 @@ import {
     uniAngleUp,
     uniListUiAlt,
     uniUserTimes,
-    uniPen
+    uniPen,
+    uniCog
 } from 'vue-unicons/dist/icons';
 
-Unicon.add([uniAngleDown, uniAngleUp, uniListUiAlt, uniUserTimes, uniPen]);
+Unicon.add([uniAngleDown, uniAngleUp, uniListUiAlt, uniUserTimes, uniPen, uniCog]);
 
 export default Unicon;

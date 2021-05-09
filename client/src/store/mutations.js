@@ -47,3 +47,20 @@ export const changeProjectDetail = (state, changedDetail) => {
     state.openProject.projectDetail.name = changedDetail.name;
     state.openProject.projectDetail.description = changedDetail.description;
 };
+
+export const setTeamLoading = (state, payload) => {
+    state.openTeam.teamDetailLoading = payload;
+};
+
+export const setTeamDetail = (state, teamDetail) => {
+    state.openTeam.teamDetail = teamDetail;
+};
+
+export const setIfUserTeamAdmin = (state, isAdmin) => {
+    state.openTeam.isAdmin = isAdmin;
+};
+
+export const changeTeamDetail = (state, changedDetail) => {
+    state.openTeam.teamDetail.name = changedDetail.name;
+    state.openTeam.teamDetail.description = changedDetail.description;
+};

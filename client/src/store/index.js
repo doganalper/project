@@ -16,6 +16,10 @@ export default new Vuex.Store({
             teams: [],
             members: [],
             membersErrorText: null
+        },
+        openTeam: {
+            teamDetailLoading: null,
+            teamDetail: null
         }
     },
     mutations,

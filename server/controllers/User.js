@@ -71,4 +71,41 @@ exports.getUser = async (req, res) => {
         profileImage: foundUser.userImage,
         projects: projects
     });
+};
+
+exports.changePassword = async (req, res) => {
+    const user = req.user;
+    const {oldPassword, newPassword1, newPassword2} = req.body;
+    const foundUser = await UserModel.findById(user.id);
+
+    if (oldPassword !== foundUser.password) return res.status(400).json({message: 'Old password is wrong'})
+    else if (newPassword1 !== newPassword2) return res.status(400).json({message: 'New passwords does not match'})
+    else {
+        await UserModel.updateOne({_id: user.id}, {
+            password: newPassword1
+        })
+
+        return res.status(200).json({
+            message: 'Successful!'
+        })
+    }
+};
+
+exports.changeUserInfo = async (req, res) => {
+    const user = req.user;
+    const {name, surname} = req.body;
+
+    if (!name && !surname) return res.status(400).json({message: 'At least one field must be provided'});
+    else {
+        await UserModel.updateOne({_id: user.id}, {
+            name: name ? name : user.name,
+            surname: surname ? surname : user.surname
+        });
+
+        const foundUser = await UserModel.findById(user.id).exec();
+
+        return res.status(200).json({
+            user: foundUser
+        })
+    }
 }

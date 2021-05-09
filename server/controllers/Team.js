@@ -103,9 +103,45 @@ exports.getTeamDetail = async (req, res) => {
     const { teamId } = req.params;
     try {
         const teamDetail = await TeamModel.findById(teamId).exec();
-        console.log(teamDetail);
+        return res.status(200).json(teamDetail);
     } catch (err) {
         console.log(err);
         return res.status(400).json({ message: 'There was an error!' })
+    }
+}
+
+exports.addUserToTeam = async (req, res) => {
+    const { teamId } = req.params;
+    const { userId } = req.body;
+
+    if (!userId) return res.status(400).json({ message: 'Fields cannot be empty!' })
+    try {
+        const projectDetail = await ProjectModel.findOne({ teams: { $all: [teamId] } });
+        if (!projectDetail.members.includes(userId) && !projectDetail.admins.includes(userId)) {
+            return res.status(401).json({ message: 'You cannot do that!' })
+        } else {
+            const user = await UserModel.findById(userId);
+            await TeamModel.updateOne(
+                { _id: teamId },
+                { $push: { members: user._id } }
+            )
+            const team = await TeamModel.findById(teamId);
+            return res.status(200).json(team)
+        }
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message: 'There was an error!' })
+    }
+}
+
+exports.removeUserFromTeam = async (req,res) => {
+    const { teamId } = req.params;
+    const { userId } = req.body;
+    
+    if (!userId) return res.status(400).json({ message: 'Fields cannot be empty!' })
+    else {
+        await TeamModel.updateOne({ _id: teamId }, { $pullAll: { members: [userId] } });
+        const teamDetail = TeamModel.findById(teamId).exec();
+        return res.status(200).json(teamDetail);
     }
 }
