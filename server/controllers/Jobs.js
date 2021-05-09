@@ -1,6 +1,7 @@
 const StageModel = require('../models/stageModel');
 const JobModel = require('../models/jobModel');
 const SubJobModel = require('../models/subJobModel');
+const CommentModel = require('../models/commentModel');
 
 exports.createJob = async (req, res) => {
     const {stageId} = req.params;
@@ -191,7 +192,6 @@ exports.removeSubJob = async (req, res) => {
             })
         } else {
             return res.status(400).json({
-                aaa: "aaa",
                 message: 'There was an error'
             })
         }
@@ -200,7 +200,7 @@ exports.removeSubJob = async (req, res) => {
             message: 'There was an error'
         })
     }
-}
+};
 
 exports.changeSubJobStatus = async (req,res) => {
     const {subJobId, status} = req.body;
@@ -214,4 +214,56 @@ exports.changeSubJobStatus = async (req,res) => {
             isJobFinished: status
         })
     }
-}
+};
+
+exports.addComment = async (req, res) => {
+    const {jobId, content} = req.body;
+    const user = req.user
+    if (!jobId || !content || content.trim().length === 0) return res.status(400).json({message: 'Fields must not be empty!'});
+    else {
+        const createdComment = await CommentModel.create({
+            userId: user.id,
+            jobId: jobId,
+            content: content
+        })
+
+        await JobModel.updateOne({_id: jobId}, {
+            $push: {comments: createdComment.id}
+        })
+
+        return res.status(200).json({
+            created: createdComment
+        })
+    }
+};
+
+exports.removeComment = async (req ,res) => {
+    const {commentId} = req.params;
+    const user = req.user;
+    try {
+        const deletedComment = await CommentModel.findById(commentId).exec();
+        if (deletedComment.userId !== user.id) return res.status(401).json({message: 'You can only delete your own comments'});
+        else {
+            const isDeleted = await CommentModel.deleteOne({_id: commentId});
+            
+            if (isDeleted.deletedCount !== 0) {
+                await JobModel.updateOne({_id: deletedComment.jobId}, {
+                    $pullAll: {comments: [commentId]}
+                })
+                return res.status(200).json({
+                    message: 'Comment deleted',
+                    commentId: commentId
+                })
+            } else {
+                return res.status(400).json({
+                    message: 'There was an error'
+                })
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({
+            message: 'There was an error'
+        })
+    }
+};
