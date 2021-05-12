@@ -64,3 +64,43 @@ export const changeTeamDetail = (state, changedDetail) => {
     state.openTeam.teamDetail.name = changedDetail.name;
     state.openTeam.teamDetail.description = changedDetail.description;
 };
+
+export const setStages = (state, stages) => {
+    state.openTeam.stages = stages;
+};
+
+export const changeJobStage = (state, payload) => {
+    state.openTeam.stages.find(
+        (stage) => stage.stageInfo._id === payload.oldStageId
+    ).jobs = state.openTeam.stages
+        .find((stage) => stage.stageInfo._id === payload.oldStageId)
+        .jobs.filter((job) => job._id !== payload.job._id);
+    state.openTeam.stages
+        .find((stage) => stage.stageInfo._id === payload.newStageId)
+        .jobs.push(payload.job);
+};
+
+export const removeStageMutation = (state, removedStageId) => {
+    state.openTeam.stages = state.openTeam.stages.filter(
+        (stage) => stage.stageInfo._id !== removedStageId
+    );
+};
+
+export const createJobMutation = (state, payload) => {
+    state.openTeam.stages
+        .find((stage) => stage.stageInfo._id === payload.stageId)
+        .jobs.push(payload.createdJob);
+};
+
+export const createStageMutation = (state, payload) => {
+    state.openTeam.stages.push(payload);
+};
+
+export const changeStageNameMutation = (state, payload) => {
+    state.openTeam.stages.find((stage) => stage.stageInfo._id === payload.stageId).stageInfo.name =
+        payload.newName;
+};
+
+export const setTeamMembersMutation = (state, payload) => {
+    state.openTeam.teamMembers = payload;
+};

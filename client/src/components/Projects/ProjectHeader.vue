@@ -22,7 +22,7 @@
             </div>
         </div>
         <div
-            v-if="$store.state.userData.isAdmin && this.$store.state.openProject.teams.length !== 0"
+            v-if="$store.state.userData.isAdmin && $store.state.openProject.teams.length !== 0"
             class="project-header-create"
         >
             <input

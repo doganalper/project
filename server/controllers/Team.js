@@ -1,6 +1,8 @@
 const ProjectModel = require('../models/projectModel');
 const UserModel = require('../models/userModel');
 const TeamModel = require('../models/teamModel');
+const StageModel = require('../models/stageModel');
+const JobModel = require('../models/jobModel');
 
 exports.createTeam = async (req, res) => {
     const { projectId } = req.params;
@@ -103,7 +105,32 @@ exports.getTeamDetail = async (req, res) => {
     const { teamId } = req.params;
     try {
         const teamDetail = await TeamModel.findById(teamId).exec();
-        return res.status(200).json(teamDetail);
+        let stages = [];
+        let members = [];
+        if (teamDetail.stages.length !== 0) {
+            for (const stageId of teamDetail.stages) {
+                const stage = await StageModel.find({ _id: '' + stageId }).exec();
+                const jobs = [];
+                for (const jobId of stage[0].jobs) {
+                    const job = await JobModel.find({_id: ''+ jobId}).exec();
+                    jobs.push(...job)
+                }
+                for (const memberId of teamDetail.members) {
+                    const user = await UserModel.findById(memberId).exec();
+                    members.push(user);
+                };
+                stages.push({
+                    stageInfo: stage[0],
+                    jobs: [...jobs],
+                })
+            }
+        }
+        const returnObject = {
+            teamDetail: teamDetail,
+            teamMembers: [...members],
+            stages
+        };
+        return res.status(200).json(returnObject);
     } catch (err) {
         console.log(err);
         return res.status(400).json({ message: 'There was an error!' })
@@ -126,7 +153,16 @@ exports.addUserToTeam = async (req, res) => {
                 { $push: { members: user._id } }
             )
             const team = await TeamModel.findById(teamId);
-            return res.status(200).json(team)
+            const teamMemberInfos = [];
+            for (const memberId of team.members) {
+                const member = await UserModel.findById(memberId).exec();
+                teamMemberInfos.push(member);
+            }
+            const returnObject = {
+                team: team,
+                members: teamMemberInfos
+            }
+            return res.status(200).json(returnObject);
         }
     } catch (err) {
         console.log(err);
@@ -141,7 +177,16 @@ exports.removeUserFromTeam = async (req,res) => {
     if (!userId) return res.status(400).json({ message: 'Fields cannot be empty!' })
     else {
         await TeamModel.updateOne({ _id: teamId }, { $pullAll: { members: [userId] } });
-        const teamDetail = TeamModel.findById(teamId).exec();
-        return res.status(200).json(teamDetail);
+        const team = await TeamModel.findById(teamId);
+        const teamMemberInfos = [];
+        for (const memberId of team.members) {
+            const member = await UserModel.findById(memberId).exec();
+            teamMemberInfos.push(member);
+        }
+        const returnObject = {
+            team: team,
+            members: teamMemberInfos
+        }
+        return res.status(200).json(returnObject);
     }
 }

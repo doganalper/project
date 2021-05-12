@@ -52,7 +52,7 @@ exports.getUser = async (req, res) => {
     const foundUser = await UserModel.findById(user.id);
 
     let projects = [];
-    if (foundUser.projects.lengt !== 0) {
+    if (foundUser.projects.length !== 0) {
         for (const projectId of foundUser.projects) {
             const project = await ProjectModel.find({ _id: '' + projectId }).exec();
             const status = project[0].admins.includes(user.id) ? 'admin' : 'member';

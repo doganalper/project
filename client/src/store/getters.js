@@ -7,3 +7,25 @@ export const getFilteredProjects = (state) => {
         memberProjects
     };
 };
+
+export const getUsersNotInTeam = (state) => {
+    const usersNotInTeam = [];
+    state.openProject.members.forEach((member) => {
+        const memberId = member.info._id;
+        if (!state.openTeam.teamDetail.members.includes(memberId) && !state.openTeam.teamDetail.admins.includes(memberId)) {
+            usersNotInTeam.push(member);
+        }
+    })
+    return usersNotInTeam;
+}
+
+export const getUsersInTeam = (state) => {
+    const usersNotInTeam = [];
+    state.openProject.members.forEach((member) => {
+        const memberId = member.info._id;
+        if (state.openTeam.teamDetail.members.includes(memberId) && !state.openTeam.teamDetail.admins.includes(memberId)) {
+            usersNotInTeam.push(member);
+        }
+    })
+    return usersNotInTeam;
+}

@@ -5,9 +5,9 @@
             <Members :members="$store.state.openProject.members" />
             <NoTeamHolder
                 @createTeam="createTeam"
-                v-if="this.$store.state.openProject.teams.length === 0"
+                v-if="$store.state.openProject.teams.length === 0"
             />
-            <TeamsHolder v-else :teams="this.$store.state.openProject.teams" />
+            <TeamsHolder v-else :teams="$store.state.openProject.teams" />
         </div>
     </div>
 </template>

@@ -18,8 +18,10 @@ export default new Vuex.Store({
             membersErrorText: null
         },
         openTeam: {
-            teamDetailLoading: null,
-            teamDetail: null
+            teamDetailLoading: true,
+            teamDetail: null,
+            stages: null,
+            teamMembers: null
         }
     },
     mutations,
