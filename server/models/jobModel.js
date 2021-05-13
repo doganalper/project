@@ -14,7 +14,7 @@ const jobModel = new mongoose.Schema({
         default: null
     },
     assignedId: {
-        type: String,
+        type: String || null,
         default: null
     },
     dueDate: {

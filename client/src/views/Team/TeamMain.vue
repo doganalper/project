@@ -1,7 +1,11 @@
 <template>
     <div class="team-main full-screen" v-if="$store.state.openTeam.teamDetailLoading === false">
         <TeamHeader @setSettingsPanel="setSettingsPanel" />
-        <TeamSettings v-if="isSettingsOpen" :usersNotInTeam="getUsersNotInTeam" :usersInTeam="getUsersInTeam"/>
+        <TeamSettings
+            v-if="isSettingsOpen"
+            :usersNotInTeam="getUsersNotInTeam"
+            :usersInTeam="getUsersInTeam"
+        />
         <div class="stages">
             <div
                 v-for="stage in $store.state.openTeam.stages"
@@ -61,7 +65,13 @@
                 </div>
                 <div class="stage-body">
                     <Draggable :list="stage.jobs" group="job" :move="move">
-                        <div v-for="job in stage.jobs" :key="job.id" class="job-card">
+                        <div
+                            v-for="job in stage.jobs"
+                            :key="job._id"
+                            :class="job.isFinished ? 'card-bg-finished' : 'card-bg-notFinished'"
+                            class="job-card"
+                            @click="openModal(job._id)"
+                        >
                             {{ job.name }}
                         </div>
                     </Draggable>
@@ -77,10 +87,9 @@
                 />
             </div>
         </div>
+        <JobModal />
     </div>
-    <div v-else>
-        Loading...
-    </div>
+    <div v-else>Loading...</div>
 </template>
 
 <script>
@@ -89,6 +98,7 @@ import TeamSettings from '@/components/Teams/TeamsSettings.vue';
 import Draggable from 'vuedraggable';
 import { changeJobStage } from '@/services/Job.js';
 import { mapGetters } from 'vuex';
+import JobModal from '@/components/Job/JobModal.vue';
 
 export default {
     data() {
@@ -107,7 +117,8 @@ export default {
     components: {
         TeamHeader,
         TeamSettings,
-        Draggable
+        Draggable,
+        JobModal
     },
     methods: {
         setSettingsPanel() {
@@ -159,6 +170,9 @@ export default {
                 });
                 this.stageChangeInput = null;
             }
+        },
+        openModal(jobId) {
+            this.$modal.show('jobModal', { jobId: jobId });
         }
     },
     computed: {
@@ -214,10 +228,6 @@ export default {
                     margin: 0.3rem 0;
                     padding: 0.3rem 0.5rem;
                     font-size: 0.8rem;
-
-                    &:hover {
-                        cursor: pointer;
-                    }
                 }
 
                 &-icons {
@@ -231,9 +241,17 @@ export default {
                 border: 1px solid lightgray;
                 border-radius: 0.5rem;
                 padding: 1rem 0.5rem;
-                background-color: rgb(200, 229, 194);
                 font-weight: 500;
                 margin-bottom: 0.6rem;
+            }
+
+            .card-bg {
+                &-finished {
+                    background-color: rgb(200, 229, 194);
+                }
+                &-notFinished {
+                    background-color: rgb(241, 241, 241);
+                }
             }
         }
 

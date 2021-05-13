@@ -3,39 +3,46 @@
         <div class="teams-settings-main flex-row">
             <div class="setting-div flex-col">
                 Description:
-                <textarea cols="20" rows="4" v-model="description" :placeholder="getTeamDescription">
+                <textarea
+                    cols="20"
+                    rows="4"
+                    v-model="description"
+                    :placeholder="getTeamDescription"
+                >
                 </textarea>
-                <button class="changeDescription" @click="changeDescription">Change Description</button>
+                <button class="changeDescription" @click="changeDescription">
+                    Change Description
+                </button>
             </div>
             <div class="setting-div flex-col">
                 Add User:
                 <select v-model="addUserSelect">
                     <option disabled selected="true" :value="null">Select a user</option>
-                    <option 
-                        :value="{userId: user.info._id}" 
+                    <option
+                        :value="{ userId: user.info._id }"
                         v-for="user in usersNotInTeam"
-                        :key="user.info._id">
-                        {{user.info.name}}    
+                        :key="user.info._id"
+                    >
+                        {{ user.info.name }}
                     </option>
                 </select>
-                <button class="changeDescription" @click="addUser"> Add User </button>
+                <button class="changeDescription" @click="addUser">Add User</button>
             </div>
             <div class="setting-div flex-col">
                 Remove User:
                 <select v-model="removeUserSelect">
                     <option disabled selected="true" :value="null">Select a user</option>
-                    <option 
-                        :value="{userId: user.info._id}" 
+                    <option
+                        :value="{ userId: user.info._id }"
                         v-for="user in usersInTeam"
-                        :key="user.info._id">
-                        {{user.info.name}}    
+                        :key="user.info._id"
+                    >
+                        {{ user.info.name }}
                     </option>
                 </select>
-                <button class="changeDescription" @click="removeUser"> Remove User </button>
+                <button class="changeDescription" @click="removeUser">Remove User</button>
             </div>
-            <div class="setting-div">
-                Team fotoğrafı değiştir
-            </div>
+            <div class="setting-div">Team fotoğrafı değiştir</div>
         </div>
     </div>
 </template>
@@ -62,7 +69,7 @@ export default {
             description: null,
             addUserSelect: null,
             removeUserSelect: null
-        }
+        };
     },
     methods: {
         async changeDescription() {
@@ -77,20 +84,28 @@ export default {
         },
         addUser() {
             if (this.addUserSelect) {
-                this.$store.dispatch('addUserToTeamAction', {teamId: this.$router.currentRoute.params.teamId, userId: this.addUserSelect});
+                this.$store.dispatch('addUserToTeamAction', {
+                    teamId: this.$router.currentRoute.params.teamId,
+                    userId: this.addUserSelect
+                });
             }
             this.addUserSelect = null;
         },
         removeUser() {
             if (this.removeUserSelect) {
-                this.$store.dispatch('removeUsersFromTeamAction', {teamId: this.$router.currentRoute.params.teamId, userId: this.removeUserSelect});
+                this.$store.dispatch('removeUsersFromTeamAction', {
+                    teamId: this.$router.currentRoute.params.teamId,
+                    userId: this.removeUserSelect
+                });
             }
             this.removeUserSelect = null;
         }
     },
     computed: {
         getTeamDescription() {
-            return this.$store.state.openTeam.teamDetail.description ? this.$store.state.openTeam.teamDetail.description : 'Enter your description here!'
+            return this.$store.state.openTeam.teamDetail.description
+                ? this.$store.state.openTeam.teamDetail.description
+                : 'Enter your description here!';
         }
     }
 };

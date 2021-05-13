@@ -12,20 +12,40 @@ export const getUsersNotInTeam = (state) => {
     const usersNotInTeam = [];
     state.openProject.members.forEach((member) => {
         const memberId = member.info._id;
-        if (!state.openTeam.teamDetail.members.includes(memberId) && !state.openTeam.teamDetail.admins.includes(memberId)) {
+        if (
+            !state.openTeam.teamDetail.members.includes(memberId) &&
+            !state.openTeam.teamDetail.admins.includes(memberId)
+        ) {
             usersNotInTeam.push(member);
         }
-    })
+    });
     return usersNotInTeam;
-}
+};
 
 export const getUsersInTeam = (state) => {
-    const usersNotInTeam = [];
+    const usersInTeam = [];
     state.openProject.members.forEach((member) => {
         const memberId = member.info._id;
-        if (state.openTeam.teamDetail.members.includes(memberId) && !state.openTeam.teamDetail.admins.includes(memberId)) {
-            usersNotInTeam.push(member);
+        if (
+            state.openTeam.teamDetail.members.includes(memberId) &&
+            !state.openTeam.teamDetail.admins.includes(memberId)
+        ) {
+            usersInTeam.push(member);
         }
-    })
-    return usersNotInTeam;
+    });
+    return usersInTeam;
+};
+
+export const getUsersThatCanTakeJobs = (state) => {
+    const usersInTeam = [];
+    state.openProject.members.forEach((member) => {
+        const memberId = member.info._id;
+        if (
+            state.openTeam.teamDetail.members.includes(memberId) &&
+            !state.openTeam.teamDetail.admins.includes(memberId)
+        ) {
+            usersInTeam.push(member);
+        }
+    });
+    return usersInTeam;
 }

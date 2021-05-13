@@ -104,3 +104,10 @@ export const changeStageNameMutation = (state, payload) => {
 export const setTeamMembersMutation = (state, payload) => {
     state.openTeam.teamMembers = payload;
 };
+
+// {jobId: this.jobInfo._id, status: newStatus.isFinished, stageId: this.jobInfo.stageId}
+export const changeJobStatus = (state, payload) => {
+    state.openTeam.stages
+        .find((stage) => stage.stageInfo._id === payload.stageId)
+        .jobs.find((job) => job._id === payload.jobId).isFinished = payload.status;
+};

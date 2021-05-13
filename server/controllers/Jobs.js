@@ -2,6 +2,7 @@ const StageModel = require('../models/stageModel');
 const JobModel = require('../models/jobModel');
 const SubJobModel = require('../models/subJobModel');
 const CommentModel = require('../models/commentModel');
+const UserModel = require('../models/userModel');
 
 exports.createJob = async (req, res) => {
     const {stageId} = req.params;
@@ -87,7 +88,7 @@ exports.changeJobStage = async (req, res) => {
 
 exports.assignUserToJob = async (req,res) => {
     const {userId, jobId} = req.body;
-    if (!userId || !jobId) return res.status(400).json({message: 'Fields cannot be empty!'})
+    if (!jobId) return res.status(400).json({message: 'Fields cannot be empty!'})
     else {
         await JobModel.updateOne({_id: jobId}, {
             assignedId: userId
@@ -108,7 +109,7 @@ exports.changeJobStatus = async (req, res) => {
         })
         return res.status(200).json({
             message: 'Status changed',
-            isJobFinished: status
+            isFinished: status
         })
     }
 };
@@ -267,3 +268,21 @@ exports.removeComment = async (req ,res) => {
         })
     }
 };
+
+exports.getJobInfo = async (req, res) => {
+    const {jobId} = req.params;
+    try {
+        let jobInfo = await JobModel.findById(jobId).exec();
+        let userInfo = null;
+        if (jobInfo.assignedId !== null) {
+            userInfo = await UserModel.findById(jobInfo.assignedId);
+        }
+        return res.status(200).json({
+            ...{...jobInfo._doc},
+            assignedUser: userInfo
+        })
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({message: 'Something went wrong'})
+    }
+}

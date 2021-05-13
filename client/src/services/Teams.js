@@ -47,7 +47,7 @@ export const changeTeamDetails = (teamId, detailObject) => {
 
 export const addUserToTeam = (teamId, userId) => {
     return new Promise((resolve, reject) => {
-        Axios.post(`/teams/${teamId}/add`, {userId: userId.userId})
+        Axios.post(`/teams/${teamId}/add`, { userId: userId.userId })
             .then((result) => {
                 resolve(result.data);
             })
@@ -55,11 +55,11 @@ export const addUserToTeam = (teamId, userId) => {
                 reject(err);
             });
     });
-}
+};
 
 export const removeUsersFromTeam = (teamId, userId) => {
     return new Promise((resolve, reject) => {
-        Axios.post(`/teams/${teamId}/remove`, {userId: userId.userId})
+        Axios.post(`/teams/${teamId}/remove`, { userId: userId.userId })
             .then((result) => {
                 resolve(result.data);
             })
@@ -67,4 +67,4 @@ export const removeUsersFromTeam = (teamId, userId) => {
                 reject(err);
             });
     });
-}
+};

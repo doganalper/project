@@ -63,7 +63,7 @@ export const removeUserFromProjectAction = async ({ commit, state }, userId) => 
 
 export const getTeamDetails = async ({ commit, state }, teamId) => {
     commit('setTeamDetail', null);
-    commit('setTeamMembersMutation', null)
+    commit('setTeamMembersMutation', null);
     const teamDetail = await getTeamDetail(teamId);
     if (!teamDetail) {
         commit('setTeamLoading', true);
@@ -75,7 +75,7 @@ export const getTeamDetails = async ({ commit, state }, teamId) => {
         }
         commit('setTeamDetail', teamDetail.teamDetail);
         commit('setStages', teamDetail.stages);
-        commit('setTeamMembersMutation', teamDetail.teamMembers)
+        commit('setTeamMembersMutation', teamDetail.teamMembers);
         commit('setTeamLoading', false);
     }
 };
@@ -97,7 +97,6 @@ export const createStageAction = async ({ commit }, payload) => {
         jobs: [],
         stageInfo: { ...stage }
     };
-    console.log(createdStage);
     commit('createStageMutation', createdStage);
 };
 
@@ -107,14 +106,14 @@ export const changeStageNameAction = async ({ commit }, payload) => {
     commit('changeStageNameMutation', stageName);
 };
 
-export const addUserToTeamAction = async ({commit}, payload) => {
+export const addUserToTeamAction = async ({ commit }, payload) => {
     const response = await addUserToTeam(payload.teamId, payload.userId);
     commit('setTeamMembersMutation', response.member);
     commit('setTeamDetail', response.team);
-}
+};
 
-export const removeUsersFromTeamAction = async ({commit}, payload) => {
+export const removeUsersFromTeamAction = async ({ commit }, payload) => {
     const response = await removeUsersFromTeam(payload.teamId, payload.userId);
     commit('setTeamMembersMutation', response.member);
     commit('setTeamDetail', response.team);
-}
+};
