@@ -70,3 +70,30 @@ export const changeJobAssigned = (jobId, userId) => {
             });
     });
 }
+
+export const setDueDate = (jobId, date) => {
+    return new Promise((resolve, reject) => {
+        Axios.post(`/job/setDueDate`, {
+            date: date,
+            jobId: jobId
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+}
+
+export const changeJobInfo = (payload) => {
+    return new Promise((resolve, reject) => {
+        Axios.post(`/job/update`, payload)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+}

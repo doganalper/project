@@ -1,8 +1,27 @@
 <template>
-    <modal name="jobModal" @before-open="beforeOpen">
+    <modal name="jobModal" @before-open="beforeOpen" :height="'50%'">
         <div v-if="jobInfo" class="job-info flex-col">
             <div class="job-info-name flex-row">
-                <span>{{ jobInfo.name }}</span>
+                <div class="flex-row" :style="{alignItems: 'center'}">
+                    <span :style="{marginRight: '0.3rem'}">{{ jobInfo.name }}</span>
+                    <transition name="input">
+                        <input
+                            type="text"
+                            :style="{height: '1.4rem', marginRight: '0.3rem'}"
+                            v-model="rename.newName"
+                            v-show="rename.isOpen"
+                            placeholder="Press enter to change"
+                            @keyup.enter="changeInfo"
+                        />
+                    </transition>
+                    <unicon
+                        name="pen"
+                        fill="royalblue"
+                        class="pen"
+                        width="15"
+                        @click="rename.isOpen = !rename.isOpen"
+                    />
+                </div>
                 <unicon
                     name="check-circle"
                     :fill="jobInfo.isFinished ? 'green' : 'black'"
@@ -20,10 +39,21 @@
                     </option>
                 </select>
             </div>
-            <div class="job-info-date">Finish Date: {{ parseInfo(jobInfo.dueDate) }}</div>
+            <div class="job-info-date flex-row">
+                <span :style="{marginRight: '0.6rem'}">Finish Date: </span>
+                <Datepicker v-model="dueDate" @selected="changeDueDate"/>
+            </div>
             <div class="job-info-description flex-col">
                 <span>Description:</span>
-                {{ parseInfo(jobInfo.description) }}
+                <textarea
+                    cols="20"
+                    rows="4"
+                    spellcheck="false"
+                    v-model="description"
+                    :placeholder="description ? description : 'This job does not have a description yet. Write description and press enter to save it!'"
+                    @keydown.ctrl.enter="changeInfo"
+                >
+                </textarea>
             </div>
         </div>
         <div v-else>Loading...</div>
@@ -31,14 +61,30 @@
 </template>
 
 <script>
-import { getJobInfo, changeJobStatus, changeJobAssigned } from '@/services/Job.js';
+import { 
+    getJobInfo,
+    changeJobStatus,
+    changeJobAssigned,
+    setDueDate,
+    changeJobInfo
+} from '@/services/Job.js';
 import { mapGetters } from 'vuex';
+import Datepicker from 'vuejs-datepicker';
 
 export default {
+    components: {
+        Datepicker
+    },
     data() {
         return {
             jobInfo: null,
-            assignedUser: null
+            assignedUser: null,
+            dueDate: null,
+            description: null,
+            rename: {
+                isOpen: false,
+                newName: null
+            }
         };
     },
     methods: {
@@ -48,8 +94,11 @@ export default {
         async beforeOpen(event) {
             const jobInfo = await getJobInfo(event.params.jobId);
             console.log(jobInfo);
+            this.rename.isOpen = false;
             this.jobInfo = jobInfo;
             this.assignedUser = jobInfo.assignedId;
+            this.dueDate = jobInfo.dueDate;
+            this.description = jobInfo.description;
         },
         parseInfo(info) {
             return info ? info : 'Empty';
@@ -69,10 +118,25 @@ export default {
         async assignUser(e) {
             const value = e.target.value;
             await changeJobAssigned(this.jobInfo._id, value.length === 0 ? null : value);
+        },
+        async changeDueDate(e) {
+            const date = new Date(e).toISOString();
+            await setDueDate(this.jobInfo._id, date);
+        },
+        async changeInfo() {
+            const response = await changeJobInfo({
+                name: this.rename.newName ? this.rename.newName : this.jobInfo.name,
+                jobId: this.jobInfo._id,
+                description: this.description ? this.description : this.jobInfo.description
+            });
+            this.jobInfo.name = response.name;
+            this.rename.isOpen = false;
+            this.rename.newName = null;
+            this.$store.commit('changeJobInfoMutation', {...response, stageId: this.jobInfo.stageId});
         }
     },
     computed: {
-        ...mapGetters(['getUsersThatCanTakeJobs'])
+        ...mapGetters(['getUsersThatCanTakeJobs']),
     }
 };
 </script>
@@ -92,19 +156,28 @@ export default {
         align-items: center;
     }
 
-    &-assign {
-        margin: 0.4rem 0;
-    }
-
     &-description {
         margin: 0.4rem 0;
     }
 
     &-assign {
+        margin: 0.4rem 0;
         select {
             width: 25%;
             padding: 0.3rem 0.1rem;
             font-size: 0.87rem;
+            border-radius: .6rem;
+            background-color: white;
+        }
+    }
+
+    &-description {
+        textarea {
+            margin-top: 0.3rem;
+            box-sizing: border-box;
+            font-size: 0.97rem;
+            border-color: lightgrey;
+            padding: 0.4rem;
         }
     }
 }

@@ -142,7 +142,6 @@ export default {
     }
 
     textarea {
-        resize: none;
         padding: 0.4rem;
         box-sizing: border-box;
     }

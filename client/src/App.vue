@@ -11,5 +11,23 @@
     &:focus {
         outline: none;
     }
+
+    textarea {
+        resize: none;
+    }
+
+    .input-enter,
+    .input-leave-to {
+        visibility: hidden;
+        width: 0;
+        margin: 0;
+        padding: 0;
+        opacity: 0;
+    }
+
+    .input-enter-active,
+    .input-leave-active {
+        transition: all 0.2s ease-out;
+    }
 }
 </style>

@@ -106,8 +106,14 @@ export const setTeamMembersMutation = (state, payload) => {
 };
 
 // {jobId: this.jobInfo._id, status: newStatus.isFinished, stageId: this.jobInfo.stageId}
-export const changeJobStatus = (state, payload) => {
+export const changeJobStatusMutation = (state, payload) => {
     state.openTeam.stages
         .find((stage) => stage.stageInfo._id === payload.stageId)
         .jobs.find((job) => job._id === payload.jobId).isFinished = payload.status;
 };
+
+export const changeJobInfoMutation = (state, payload) => {
+    const foundJob = state.openTeam.stages.find((stage) => stage.stageInfo._id === payload.stageId).jobs.find((job) => job._id === payload.jobId);
+    foundJob.name = payload.name;
+    foundJob.description = payload.description;
+}
