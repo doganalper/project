@@ -171,9 +171,7 @@ exports.addSubJob = async (req,res) => {
         await JobModel.updateOne({_id: jobId}, {
             $push: {subWorks: createdSubJob.id}
         })
-        return res.status(200).json({
-            created: createdSubJob
-        })
+        return res.status(200).json(createdSubJob);
     }
 }
 
@@ -244,7 +242,7 @@ exports.removeComment = async (req ,res) => {
         if (deletedComment.userId !== user.id) return res.status(401).json({message: 'You can only delete your own comments'});
         else {
             const isDeleted = await CommentModel.deleteOne({_id: commentId});
-            
+
             if (isDeleted.deletedCount !== 0) {
                 await JobModel.updateOne({_id: deletedComment.jobId}, {
                     $pullAll: {comments: [commentId]}
@@ -276,6 +274,7 @@ exports.getJobInfo = async (req, res) => {
         if (jobInfo.assignedId !== null) {
             userInfo = await UserModel.findById(jobInfo.assignedId);
         }
+
         const commentInfos = [];
         for (const commentId of jobInfo.comments) {
             await CommentModel.findOne({_id: commentId}, async (err, doc) => {

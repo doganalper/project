@@ -124,3 +124,18 @@ export const createComment = (jobId, content) => {
             });
     });
 };
+
+export const createSubJob = (jobId, subJobName) => {
+  return new Promise((resolve, reject) => {
+    Axios.post('/job/subJob', {
+      jobId: jobId,
+      subJobName: subJobName
+    })
+      .then((result) => {
+        resolve(result.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}

@@ -43,7 +43,12 @@
             </div>
             <div class="job-info-date flex-row">
                 <span :style="{ marginRight: '0.6rem' }">Finish Date: </span>
-                <Datepicker v-model="dueDate" @selected="changeDueDate" :monday-first="datePickerConfig.mondayFirst" :disabled-dates="datePickerConfig.disabledDates"/>
+                <Datepicker
+                    v-model="dueDate"
+                    @selected="changeDueDate"
+                    :monday-first="datePickerConfig.mondayFirst"
+                    :disabled-dates="datePickerConfig.disabledDates"
+                />
             </div>
             <div class="job-info-description flex-col">
                 <span>Description:</span>
@@ -62,18 +67,28 @@
                 </textarea>
             </div>
             <div class="job-info-comment flex-col">
-                <div class="comment-header flex-row">
+                <div class="comment-header flex-row" @click="isCommentsOpen = !isCommentsOpen">
                     <span>Comments:</span>
-                    <unicon :name="isCommentsOpen ? 'angle-down' : 'angle-up'" @click="isCommentsOpen = !isCommentsOpen"/>
+                    <unicon :name="isCommentsOpen ? 'angle-down' : 'angle-up'"/>
                 </div>
                 <div v-if="isCommentsOpen">
-                    <CreateComment :jobId="jobInfo._id" @commentCreated="createComment" />
-                    <Comment 
+                    <CreateComment :jobId="jobInfo._id" @commentCreated="createCommentHandler" />
+                    <Comment
                         v-for="comment in jobInfo.comments"
                         :key="comment._id"
                         :comment="comment"
                         @commentRemoved="removeComment"
                     />
+                </div>
+            </div>
+            <div class="job-info-subJob flex-col">
+                <div class="subJob-header flex-row" @click="isSubJobsOpen = !isSubJobsOpen">
+                    <span>Sub Jobs:</span>
+                    <unicon :name="isSubJobsOpen ? 'angle-down' : 'angle-up'"/>
+                </div>
+                <div v-if="isSubJobsOpen">
+                    <CreateSubJob :jobId="jobInfo._id" @subJobCreated="createSubJobHandler" />
+                    {{ jobInfo.subWorks.length }}
                 </div>
             </div>
         </div>
@@ -93,12 +108,14 @@ import { mapGetters } from 'vuex';
 import Datepicker from 'vuejs-datepicker';
 import Comment from '@/components/Comment/JobComment.vue';
 import CreateComment from '@/components/Comment/CreateComment.vue';
+import CreateSubJob from '@/components/SubJob/CreateSubJob.vue';
 
 export default {
     components: {
         Datepicker,
         Comment,
-        CreateComment
+        CreateComment,
+        CreateSubJob
     },
     data() {
         return {
@@ -110,13 +127,13 @@ export default {
                 isOpen: false,
                 newName: null
             },
-            datePickerConfig : {
+            datePickerConfig: {
                 disabledDates: {
-                   to: new Date(Date.now() - (1000 * 60 * 60 * 24))
+                    to: new Date(Date.now() - 1000 * 60 * 60 * 24)
                 },
                 mondayFirst: true
             },
-            isCommentsOpen: true,
+            isCommentsOpen: false,
             isSubJobsOpen: false
         };
     },
@@ -170,11 +187,17 @@ export default {
                 stageId: this.jobInfo.stageId
             });
         },
-        removeComment (commentId) {
-            this.jobInfo.comments = this.jobInfo.comments.filter((comment) => comment._id !== commentId);
+        removeComment(commentId) {
+            this.jobInfo.comments = this.jobInfo.comments.filter(
+                (comment) => comment._id !== commentId
+            );
         },
-        createComment(commentInfo) {
+        createCommentHandler(commentInfo) {
+          console.log(commentInfo);
             this.jobInfo.comments.push(commentInfo);
+        },
+        createSubJobHandler(subJobInfo) {
+          this.jobInfo.subWorks.push(subJobInfo);
         }
     },
     computed: {
@@ -231,6 +254,19 @@ export default {
             justify-content: space-between;
             padding-right: 0.5rem;
             margin-bottom: 0.3rem;
+            cursor: pointer;
+        }
+    }
+
+    &-subJob {
+        .subJob-header {
+            border-bottom: 1px solid black;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+            padding-right: 0.5rem;
+            margin-bottom: 0.3rem;
+            cursor: pointer;
         }
     }
 }
