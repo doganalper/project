@@ -180,6 +180,7 @@ export default {
     },
     mounted() {
         this.$store.dispatch('getTeamDetails', this.$router.currentRoute.params.teamId);
+        this.$store.dispatch('getProjectDetail', this.$route.params.projectId);
     }
 };
 </script>

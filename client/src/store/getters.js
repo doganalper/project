@@ -48,4 +48,4 @@ export const getUsersThatCanTakeJobs = (state) => {
         }
     });
     return usersInTeam;
-}
+};

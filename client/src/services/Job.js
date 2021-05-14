@@ -69,7 +69,7 @@ export const changeJobAssigned = (jobId, userId) => {
                 reject(err);
             });
     });
-}
+};
 
 export const setDueDate = (jobId, date) => {
     return new Promise((resolve, reject) => {
@@ -84,7 +84,7 @@ export const setDueDate = (jobId, date) => {
                 reject(err);
             });
     });
-}
+};
 
 export const changeJobInfo = (payload) => {
     return new Promise((resolve, reject) => {
@@ -96,4 +96,4 @@ export const changeJobInfo = (payload) => {
                 reject(err);
             });
     });
-}
+};

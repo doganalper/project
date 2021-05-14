@@ -62,8 +62,7 @@ export const removeUserFromProjectAction = async ({ commit, state }, userId) => 
 };
 
 export const getTeamDetails = async ({ commit, state }, teamId) => {
-    commit('setTeamDetail', null);
-    commit('setTeamMembersMutation', null);
+    commit('setTeamLoading', true);
     const teamDetail = await getTeamDetail(teamId);
     if (!teamDetail) {
         commit('setTeamLoading', true);

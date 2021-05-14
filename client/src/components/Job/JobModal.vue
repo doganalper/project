@@ -2,12 +2,12 @@
     <modal name="jobModal" @before-open="beforeOpen" :height="'50%'">
         <div v-if="jobInfo" class="job-info flex-col">
             <div class="job-info-name flex-row">
-                <div class="flex-row" :style="{alignItems: 'center'}">
-                    <span :style="{marginRight: '0.3rem'}">{{ jobInfo.name }}</span>
+                <div class="flex-row" :style="{ alignItems: 'center' }">
+                    <span :style="{ marginRight: '0.3rem' }">{{ jobInfo.name }}</span>
                     <transition name="input">
                         <input
                             type="text"
-                            :style="{height: '1.4rem', marginRight: '0.3rem'}"
+                            :style="{ height: '1.4rem', marginRight: '0.3rem' }"
                             v-model="rename.newName"
                             v-show="rename.isOpen"
                             placeholder="Press enter to change"
@@ -31,17 +31,19 @@
             <div class="job-info-assign">
                 Assigned To:
                 <select v-model="assignedUser" @change="assignUser">
-                    <option :value="null">
-                        No one
-                    </option>
-                    <option :value="user.info._id" v-for="user in getUsersThatCanTakeJobs" :key="user.info._id">
-                        {{fetchName(user.info)}}
+                    <option :value="null">No one</option>
+                    <option
+                        :value="user.info._id"
+                        v-for="user in getUsersThatCanTakeJobs"
+                        :key="user.info._id"
+                    >
+                        {{ fetchName(user.info) }}
                     </option>
                 </select>
             </div>
             <div class="job-info-date flex-row">
-                <span :style="{marginRight: '0.6rem'}">Finish Date: </span>
-                <Datepicker v-model="dueDate" @selected="changeDueDate"/>
+                <span :style="{ marginRight: '0.6rem' }">Finish Date: </span>
+                <Datepicker v-model="dueDate" @selected="changeDueDate" :monday-first="datePickerConfig.mondayFirst" :disabled-dates="datePickerConfig.disabledDates"/>
             </div>
             <div class="job-info-description flex-col">
                 <span>Description:</span>
@@ -50,7 +52,11 @@
                     rows="4"
                     spellcheck="false"
                     v-model="description"
-                    :placeholder="description ? description : 'This job does not have a description yet. Write description and press enter to save it!'"
+                    :placeholder="
+                        description
+                            ? description
+                            : 'This job does not have a description yet. Write description and press enter to save it!'
+                    "
                     @keydown.ctrl.enter="changeInfo"
                 >
                 </textarea>
@@ -61,7 +67,7 @@
 </template>
 
 <script>
-import { 
+import {
     getJobInfo,
     changeJobStatus,
     changeJobAssigned,
@@ -84,6 +90,12 @@ export default {
             rename: {
                 isOpen: false,
                 newName: null
+            },
+            datePickerConfig : {
+                disabledDates: {
+                   to: new Date(Date.now() - (1000 * 60 * 60 * 24))
+                },
+                mondayFirst: true
             }
         };
     },
@@ -104,12 +116,12 @@ export default {
             return info ? info : 'Empty';
         },
         fetchName(info) {
-            return `${info.name} ${info.surname}`
+            return `${info.name} ${info.surname}`;
         },
         async changeJobStatusHandler() {
             const newStatus = await changeJobStatus(this.jobInfo._id, !this.jobInfo.isFinished);
             this.jobInfo['isFinished'] = newStatus.isFinished;
-            this.$store.commit('changeJobStatus', {
+            this.$store.commit('changeJobStatusMutation', {
                 jobId: this.jobInfo._id,
                 status: newStatus.isFinished,
                 stageId: this.jobInfo.stageId
@@ -132,11 +144,14 @@ export default {
             this.jobInfo.name = response.name;
             this.rename.isOpen = false;
             this.rename.newName = null;
-            this.$store.commit('changeJobInfoMutation', {...response, stageId: this.jobInfo.stageId});
+            this.$store.commit('changeJobInfoMutation', {
+                ...response,
+                stageId: this.jobInfo.stageId
+            });
         }
     },
     computed: {
-        ...mapGetters(['getUsersThatCanTakeJobs']),
+        ...mapGetters(['getUsersThatCanTakeJobs'])
     }
 };
 </script>
@@ -166,7 +181,7 @@ export default {
             width: 25%;
             padding: 0.3rem 0.1rem;
             font-size: 0.87rem;
-            border-radius: .6rem;
+            border-radius: 0.6rem;
             background-color: white;
         }
     }

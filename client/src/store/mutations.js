@@ -113,7 +113,9 @@ export const changeJobStatusMutation = (state, payload) => {
 };
 
 export const changeJobInfoMutation = (state, payload) => {
-    const foundJob = state.openTeam.stages.find((stage) => stage.stageInfo._id === payload.stageId).jobs.find((job) => job._id === payload.jobId);
+    const foundJob = state.openTeam.stages
+        .find((stage) => stage.stageInfo._id === payload.stageId)
+        .jobs.find((job) => job._id === payload.jobId);
     foundJob.name = payload.name;
     foundJob.description = payload.description;
-}
+};
