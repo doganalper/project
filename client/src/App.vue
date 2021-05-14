@@ -12,8 +12,17 @@
         outline: none;
     }
 
+    &::selection {
+        background-color: white;
+    }
+
     textarea {
         resize: none;
+
+        &::selection {
+            background-color: lightskyblue;
+            color: white;
+        }
     }
 
     .input-enter,

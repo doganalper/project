@@ -9,5 +9,6 @@ router.post('/signin', UserController.login);
 router.get('/profile-me', authenticateToken, UserController.getUser);
 router.post('/change-password', authenticateToken, UserController.changePassword);
 router.post('/update-me', authenticateToken, UserController.changeUserInfo);
+router.post('/get-user', authenticateToken, UserController.getUserById);
 
 module.exports = router;

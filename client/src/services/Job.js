@@ -97,3 +97,30 @@ export const changeJobInfo = (payload) => {
             });
     });
 };
+
+export const removeComment = (commentId) => {
+    return new Promise((resolve, reject) => {
+        Axios.delete(`/job/comment/${commentId}`)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
+export const createComment = (jobId, content) => {
+    return new Promise((resolve, reject) => {
+        Axios.post('/job/comment/add', {
+            jobId: jobId,
+            content: content
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};

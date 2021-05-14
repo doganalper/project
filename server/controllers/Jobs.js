@@ -232,9 +232,7 @@ exports.addComment = async (req, res) => {
             $push: {comments: createdComment.id}
         })
 
-        return res.status(200).json({
-            created: createdComment
-        })
+        return res.status(200).json(createdComment);
     }
 };
 
@@ -271,15 +269,25 @@ exports.removeComment = async (req ,res) => {
 
 exports.getJobInfo = async (req, res) => {
     const {jobId} = req.params;
+    const user = req.user;
     try {
         let jobInfo = await JobModel.findById(jobId).exec();
         let userInfo = null;
         if (jobInfo.assignedId !== null) {
             userInfo = await UserModel.findById(jobInfo.assignedId);
         }
+        const commentInfos = [];
+        for (const commentId of jobInfo.comments) {
+            await CommentModel.findOne({_id: commentId}, async (err, doc) => {
+                const commentInfo = await doc.toObject();
+                commentInfo.isUser = (doc.userId === user.id);
+                commentInfos.push(commentInfo);
+            })
+        }
         return res.status(200).json({
             ...{...jobInfo._doc},
-            assignedUser: userInfo
+            assignedUser: userInfo,
+            comments: commentInfos
         })
     } catch (err) {
         console.log(err);

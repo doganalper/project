@@ -1,5 +1,5 @@
 <template>
-    <modal name="jobModal" @before-open="beforeOpen" :height="'50%'">
+    <modal name="jobModal" @before-open="beforeOpen" :height="'auto'" :scrollable="true">
         <div v-if="jobInfo" class="job-info flex-col">
             <div class="job-info-name flex-row">
                 <div class="flex-row" :style="{ alignItems: 'center' }">
@@ -61,6 +61,21 @@
                 >
                 </textarea>
             </div>
+            <div class="job-info-comment flex-col">
+                <div class="comment-header flex-row">
+                    <span>Comments:</span>
+                    <unicon :name="isCommentsOpen ? 'angle-down' : 'angle-up'" @click="isCommentsOpen = !isCommentsOpen"/>
+                </div>
+                <div v-if="isCommentsOpen">
+                    <CreateComment :jobId="jobInfo._id" @commentCreated="createComment" />
+                    <Comment 
+                        v-for="comment in jobInfo.comments"
+                        :key="comment._id"
+                        :comment="comment"
+                        @commentRemoved="removeComment"
+                    />
+                </div>
+            </div>
         </div>
         <div v-else>Loading...</div>
     </modal>
@@ -76,10 +91,14 @@ import {
 } from '@/services/Job.js';
 import { mapGetters } from 'vuex';
 import Datepicker from 'vuejs-datepicker';
+import Comment from '@/components/Comment/JobComment.vue';
+import CreateComment from '@/components/Comment/CreateComment.vue';
 
 export default {
     components: {
-        Datepicker
+        Datepicker,
+        Comment,
+        CreateComment
     },
     data() {
         return {
@@ -96,7 +115,9 @@ export default {
                    to: new Date(Date.now() - (1000 * 60 * 60 * 24))
                 },
                 mondayFirst: true
-            }
+            },
+            isCommentsOpen: true,
+            isSubJobsOpen: false
         };
     },
     methods: {
@@ -148,6 +169,12 @@ export default {
                 ...response,
                 stageId: this.jobInfo.stageId
             });
+        },
+        removeComment (commentId) {
+            this.jobInfo.comments = this.jobInfo.comments.filter((comment) => comment._id !== commentId);
+        },
+        createComment(commentInfo) {
+            this.jobInfo.comments.push(commentInfo);
         }
     },
     computed: {
@@ -193,6 +220,17 @@ export default {
             font-size: 0.97rem;
             border-color: lightgrey;
             padding: 0.4rem;
+        }
+    }
+
+    &-comment {
+        .comment-header {
+            border-bottom: 1px solid black;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+            padding-right: 0.5rem;
+            margin-bottom: 0.3rem;
         }
     }
 }

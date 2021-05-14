@@ -109,3 +109,20 @@ exports.changeUserInfo = async (req, res) => {
         })
     }
 }
+
+exports.getUserById = async (req,res) => {
+    const {userId} = req.body;
+
+    const userInfo = await UserModel.findOne({_id: userId}, (err, doc) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).json({message:'Something went wrong!'})
+        }
+        let foundUser = doc.toObject();
+        delete foundUser['password'];
+        delete foundUser['projects'];
+        delete foundUser['_id'];
+        console.log(foundUser);
+        return res.status(200).json(foundUser);
+    })
+}

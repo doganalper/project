@@ -8,7 +8,8 @@ import {
     uniCog,
     uniTimes,
     uniPlus,
-    uniCheckCircle
+    uniCheckCircle,
+    uniTrashAlt
 } from 'vue-unicons/dist/icons';
 
 Unicon.add([
@@ -20,7 +21,8 @@ Unicon.add([
     uniCog,
     uniTimes,
     uniPlus,
-    uniCheckCircle
+    uniCheckCircle,
+    uniTrashAlt
 ]);
 
 export default Unicon;
