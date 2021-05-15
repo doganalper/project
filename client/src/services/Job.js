@@ -126,16 +126,43 @@ export const createComment = (jobId, content) => {
 };
 
 export const createSubJob = (jobId, subJobName) => {
-  return new Promise((resolve, reject) => {
-    Axios.post('/job/subJob', {
-      jobId: jobId,
-      subJobName: subJobName
-    })
-      .then((result) => {
-        resolve(result.data);
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
+    return new Promise((resolve, reject) => {
+        Axios.post('/job/subJob', {
+            jobId: jobId,
+            subJobName: subJobName
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
+export const changeSubJobStatus = (subJobId, status) => {
+    return new Promise((resolve, reject) => {
+        Axios.patch('/job/subJob', {
+            subJobId: subJobId,
+            status: status
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+}
+
+export const removeSubJob = (subJobId) => {
+    return new Promise((resolve, reject) => {
+        Axios.delete(`/job/subJob/${subJobId}`)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
 }

@@ -22,4 +22,4 @@ app.use('/teams', teamRoutes);
 app.use('/stage', stageRoutes);
 app.use('/job', jobRoutes);
 
-app.listen(3000)
+app.listen(3000);

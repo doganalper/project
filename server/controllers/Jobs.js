@@ -275,18 +275,28 @@ exports.getJobInfo = async (req, res) => {
             userInfo = await UserModel.findById(jobInfo.assignedId);
         }
 
-        const commentInfos = [];
-        for (const commentId of jobInfo.comments) {
-            await CommentModel.findOne({_id: commentId}, async (err, doc) => {
+        const commentInfos = jobInfo.comments.map(async (commentId) => {
+            return await CommentModel.findOne({_id: commentId}, async (err, doc) => {
                 const commentInfo = await doc.toObject();
                 commentInfo.isUser = (doc.userId === user.id);
-                commentInfos.push(commentInfo);
+                return commentInfo;
             })
-        }
+        });
+        const commentsArr = await Promise.all(commentInfos);
+
+        const subJobs = jobInfo.subWorks.map(async (subJob) => {
+            return await SubJobModel.findOne({_id: subJob}, async (err, doc) => {
+                const subJobInfo = await doc.toObject();
+                return subJobInfo;
+            })
+        });
+        const subJobsArr = await Promise.all(subJobs);
+
         return res.status(200).json({
             ...{...jobInfo._doc},
             assignedUser: userInfo,
-            comments: commentInfos
+            comments: commentsArr,
+            subWorks: subJobsArr
         })
     } catch (err) {
         console.log(err);

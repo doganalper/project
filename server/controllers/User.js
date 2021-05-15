@@ -121,8 +121,6 @@ exports.getUserById = async (req,res) => {
         let foundUser = doc.toObject();
         delete foundUser['password'];
         delete foundUser['projects'];
-        delete foundUser['_id'];
-        console.log(foundUser);
         return res.status(200).json(foundUser);
     })
 }

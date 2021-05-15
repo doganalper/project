@@ -69,7 +69,7 @@
             <div class="job-info-comment flex-col">
                 <div class="comment-header flex-row" @click="isCommentsOpen = !isCommentsOpen">
                     <span>Comments:</span>
-                    <unicon :name="isCommentsOpen ? 'angle-down' : 'angle-up'"/>
+                    <unicon :name="isCommentsOpen ? 'angle-down' : 'angle-up'" />
                 </div>
                 <div v-if="isCommentsOpen">
                     <CreateComment :jobId="jobInfo._id" @commentCreated="createCommentHandler" />
@@ -84,11 +84,14 @@
             <div class="job-info-subJob flex-col">
                 <div class="subJob-header flex-row" @click="isSubJobsOpen = !isSubJobsOpen">
                     <span>Sub Jobs:</span>
-                    <unicon :name="isSubJobsOpen ? 'angle-down' : 'angle-up'"/>
+                    <div class="flex-row">
+                        <span>{{ getFinishedJobCount +' / ' + subJobCounts }}</span>
+                        <unicon :name="isSubJobsOpen ? 'angle-down' : 'angle-up'" />
+                    </div>
                 </div>
                 <div v-if="isSubJobsOpen">
                     <CreateSubJob :jobId="jobInfo._id" @subJobCreated="createSubJobHandler" />
-                    {{ jobInfo.subWorks.length }}
+                    <Subjobs :subJobs="jobInfo.subWorks" @subJobRemoved="subJobRemoveHandler"/>
                 </div>
             </div>
         </div>
@@ -109,13 +112,15 @@ import Datepicker from 'vuejs-datepicker';
 import Comment from '@/components/Comment/JobComment.vue';
 import CreateComment from '@/components/Comment/CreateComment.vue';
 import CreateSubJob from '@/components/SubJob/CreateSubJob.vue';
+import Subjobs from '@/components/SubJob/SubJobs.vue';
 
 export default {
     components: {
         Datepicker,
         Comment,
         CreateComment,
-        CreateSubJob
+        CreateSubJob,
+        Subjobs
     },
     data() {
         return {
@@ -193,15 +198,23 @@ export default {
             );
         },
         createCommentHandler(commentInfo) {
-          console.log(commentInfo);
             this.jobInfo.comments.push(commentInfo);
         },
         createSubJobHandler(subJobInfo) {
-          this.jobInfo.subWorks.push(subJobInfo);
+            this.jobInfo.subWorks.push(subJobInfo);
+        },
+        subJobRemoveHandler(subJobId) {
+            this.jobInfo.subWorks = this.jobInfo.subWorks.filter((subJob) => subJob._id !== subJobId);
         }
     },
     computed: {
-        ...mapGetters(['getUsersThatCanTakeJobs'])
+        ...mapGetters(['getUsersThatCanTakeJobs']),
+        subJobCounts() {
+            return this.jobInfo.subWorks.length;
+        },
+        getFinishedJobCount() {
+            return this.jobInfo.subWorks.filter((subWork) => subWork.isFinished === true).length;
+        }
     }
 };
 </script>
@@ -267,6 +280,11 @@ export default {
             padding-right: 0.5rem;
             margin-bottom: 0.3rem;
             cursor: pointer;
+
+            div {
+                display: flex;
+                align-items: center;
+            }
         }
     }
 }

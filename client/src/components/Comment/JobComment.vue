@@ -4,7 +4,7 @@
             <span v-if="!userInfo.userImage">
                 {{ getNameFirsts(userInfo.name, userInfo.surname) }}
             </span>
-            <img v-else :src="userInfo.userImage">
+            <img v-else :src="userInfo.userImage" />
         </div>
         <span class="comment-content">
             {{ comment.content }}
@@ -14,7 +14,7 @@
                 name="trash-alt"
                 fill="red"
                 width="18"
-                v-if="comment.isUser"
+                v-if="userInfo.isUser"
                 @click="removeComment"
             />
         </span>
@@ -45,16 +45,15 @@ export default {
         },
         async removeComment() {
             const removedComment = await removeComment(this.comment._id);
-            console.log(removedComment);
             this.$emit('commentRemoved', removedComment.commentId);
         }
     },
     async mounted() {
-    const response = await Axios.post(`/user/get-user`, {userId: this.comment.userId});
-    const userInfo = response.data;
-    console.log(userInfo);
-    this.userInfo = userInfo;
-  }
+        const response = await Axios.post(`/user/get-user`, { userId: this.comment.userId });
+        const userInfo = response.data;
+        this.userInfo = userInfo;
+        this.userInfo.isUser = this.userInfo._id === this.comment.userId;
+    }
 };
 </script>
 
