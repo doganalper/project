@@ -2,7 +2,7 @@
     <div class="team-header">
         <div class="team-header-name">
             <b>Takım: </b> {{ $store.state.openTeam.teamDetail.name }}
-            <div class="change-div">
+            <div class="change-div" v-if="$store.state.userData.isAdmin">
                 <transition name="input">
                     <input
                         type="text"
@@ -21,7 +21,8 @@
                 />
             </div>
         </div>
-        <unicon name="cog" fill="royalblue" class="pen" width="15" @click="setSettings" />
+        <unicon name="cog" fill="royalblue" class="pen" width="15" @click="setSettings" v-if="$store.state.userData.isAdmin"/>
+        <div class="" v-else>{{$store.state.openTeam.teamDetail.description}}</div>
     </div>
 </template>
 

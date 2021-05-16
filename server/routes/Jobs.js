@@ -14,9 +14,9 @@ router.patch('/subJob', authenticateToken, JobsController.changeSubJobStatus);
 router.post('/comment/add', authenticateToken, JobsController.addComment);
 router.delete('/comment/:commentId', authenticateToken, JobsController.removeComment);
 router.get('/get/:jobId',authenticateToken, JobsController.getJobInfo);
+router.post('/deleteJob/:stageId', authenticateToken, JobsController.removeJob);
 router.route('/:stageId')
     .post(authenticateToken, JobsController.createJob)
-    .delete(authenticateToken, JobsController.removeJob)
     .patch(authenticateToken, JobsController.changeJobStage)
 
 module.exports = router;

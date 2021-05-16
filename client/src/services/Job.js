@@ -153,11 +153,25 @@ export const changeSubJobStatus = (subJobId, status) => {
                 reject(err);
             });
     });
-}
+};
 
 export const removeSubJob = (subJobId) => {
     return new Promise((resolve, reject) => {
         Axios.delete(`/job/subJob/${subJobId}`)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
+export const removeJob = (stageId,jobId) => {
+    return new Promise((resolve, reject) => {
+        Axios.post(`/job/deleteJob/${stageId}`, {
+            jobId: jobId
+        })
             .then((result) => {
                 resolve(result.data);
             })

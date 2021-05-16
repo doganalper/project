@@ -66,6 +66,7 @@
                 >
                 </textarea>
             </div>
+            <button class="remove-button" @click="removeJobHandler">Remove Job</button>
             <div class="job-info-comment flex-col">
                 <div class="comment-header flex-row" @click="isCommentsOpen = !isCommentsOpen">
                     <span>Comments:</span>
@@ -85,13 +86,13 @@
                 <div class="subJob-header flex-row" @click="isSubJobsOpen = !isSubJobsOpen">
                     <span>Sub Jobs:</span>
                     <div class="flex-row">
-                        <span>{{ getFinishedJobCount +' / ' + subJobCounts }}</span>
+                        <span>{{ getFinishedJobCount + ' / ' + subJobCounts }}</span>
                         <unicon :name="isSubJobsOpen ? 'angle-down' : 'angle-up'" />
                     </div>
                 </div>
                 <div v-if="isSubJobsOpen">
                     <CreateSubJob :jobId="jobInfo._id" @subJobCreated="createSubJobHandler" />
-                    <Subjobs :subJobs="jobInfo.subWorks" @subJobRemoved="subJobRemoveHandler"/>
+                    <Subjobs :subJobs="jobInfo.subWorks" @subJobRemoved="subJobRemoveHandler" />
                 </div>
             </div>
         </div>
@@ -105,7 +106,8 @@ import {
     changeJobStatus,
     changeJobAssigned,
     setDueDate,
-    changeJobInfo
+    changeJobInfo,
+    removeJob
 } from '@/services/Job.js';
 import { mapGetters } from 'vuex';
 import Datepicker from 'vuejs-datepicker';
@@ -204,7 +206,15 @@ export default {
             this.jobInfo.subWorks.push(subJobInfo);
         },
         subJobRemoveHandler(subJobId) {
-            this.jobInfo.subWorks = this.jobInfo.subWorks.filter((subJob) => subJob._id !== subJobId);
+            this.jobInfo.subWorks = this.jobInfo.subWorks.filter(
+                (subJob) => subJob._id !== subJobId
+            );
+        },
+        async removeJobHandler() {
+            const response = await removeJob(this.jobInfo.stageId, this.jobInfo._id);
+            console.log(response);
+            this.$store.commit('removeJobMutation', {jobId: response.jobId, stageId: this.jobInfo.stageId});
+            this.closeModal()
         }
     },
     computed: {
@@ -236,6 +246,19 @@ export default {
 
     &-description {
         margin: 0.4rem 0;
+    }
+
+    .remove-button {
+        width: 20%;
+        align-self: flex-end;
+        margin-bottom: 0.3rem;
+        background-color: red;
+        color: white;
+        border-radius: 0.3rem;
+        font-weight: 600;
+        padding: 0.2rem 0;
+        border: none;
+        cursor: pointer;
     }
 
     &-assign {
