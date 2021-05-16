@@ -1,3 +1,7 @@
+const {v4: uuidv4} = require('uuid');
+const path = require('path');
+const fs = require('fs');
+
 const UserModel = require('../models/userModel');
 const ProjectModel = require('../models/projectModel');
 
@@ -108,12 +112,12 @@ exports.changeUserInfo = async (req, res) => {
             user: foundUser
         })
     }
-}
+};
 
 exports.getUserById = async (req,res) => {
     const {userId} = req.body;
 
-    const userInfo = await UserModel.findOne({_id: userId}, (err, doc) => {
+    await UserModel.findOne({_id: userId}, (err, doc) => {
         if (err) {
             console.log(err);
             return res.status(400).json({message:'Something went wrong!'})
@@ -121,6 +125,36 @@ exports.getUserById = async (req,res) => {
         let foundUser = doc.toObject();
         delete foundUser['password'];
         delete foundUser['projects'];
-        return res.status(200).json(foundUser);
+        return res.status(200).json({
+            ...foundUser,
+            userImage: foundUser.userImage
+        });
     })
+}
+
+exports.updateProfilePicture = async (req, res) => {
+    const user = req.user;
+    try {
+        await UserModel.updateOne({_id: user.id}, {
+            userImage: req.file.filename
+        })
+        res.status(200).json({
+            userImage: req.file.filename
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({
+            message: 'something went wrong!'
+        })
+    }
+}
+
+exports.getImage = async (req, res) => {
+    const {file} = req.params;
+    console.log(file);
+    const options = {
+        root: './public'
+    }
+
+    res.sendFile(file, options);
 }

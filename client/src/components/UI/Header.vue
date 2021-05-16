@@ -1,10 +1,11 @@
 <template>
     <div class="header flex-row">
-        <div class="username">
-            {{ username }}
+        <div class="logo" @click="routeToMain">
+            Project
         </div>
         <div class="buttons-part flex-row">
-            <div class="button" @click="routeToMain">My Profile</div>
+            <div class="button" @click="routeToProfile" v-if="!$route.path.includes('profile')">My Profile</div>
+            <div class="button" @click="routeToMain" v-if="$route.path.includes('profile')">My Projects</div>
             <div class="button" @click="logout">Logout</div>
         </div>
     </div>
@@ -14,20 +15,16 @@
 import { removeToken } from '@/utils/localstorage.js';
 
 export default {
-    props: {
-        username: {
-            type: String,
-            required: true
-        }
-    },
     methods: {
         logout() {
             removeToken();
             this.$router.push('/auth');
         },
-        //TODO: Change this with user page
         routeToMain() {
             this.$router.push('/');
+        },
+        routeToProfile() {
+            this.$router.push('/profile')
         }
     }
 };
@@ -41,6 +38,10 @@ export default {
     justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
+
+    .logo {
+        cursor: pointer;
+    }
 
     .buttons-part {
         font-weight: 600;

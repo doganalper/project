@@ -4,7 +4,7 @@
             <span v-if="!userInfo.userImage">
                 {{ getNameFirsts(userInfo.name, userInfo.surname) }}
             </span>
-            <img v-else :src="userInfo.userImage" />
+            <img v-else :src="require('/home/alperdogan/Desktop/projects/project/server/public/' + userInfo.userImage)"/>
         </div>
         <span class="comment-content">
             {{ comment.content }}
@@ -83,8 +83,10 @@ export default {
 
         img {
             width: 100%;
-            height: 100%;
+            height: 30px;
             border-radius: 50%;
+            background-position:50% 50%;
+            background-repeat:no-repeat; 
         }
     }
     &-content {
