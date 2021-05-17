@@ -1,11 +1,13 @@
 <template>
     <div class="header flex-row">
-        <div class="logo" @click="routeToMain">
-            Project
-        </div>
+        <div class="logo" @click="routeToMain">Project</div>
         <div class="buttons-part flex-row">
-            <div class="button" @click="routeToProfile" v-if="!$route.path.includes('profile')">My Profile</div>
-            <div class="button" @click="routeToMain" v-if="$route.path.includes('profile')">My Projects</div>
+            <div class="button" @click="routeToProfile" v-if="!$route.path.includes('profile')">
+                My Profile
+            </div>
+            <div class="button" @click="routeToMain" v-if="$route.path.includes('profile')">
+                My Projects
+            </div>
             <div class="button" @click="logout">Logout</div>
         </div>
     </div>
@@ -24,7 +26,7 @@ export default {
             this.$router.push('/');
         },
         routeToProfile() {
-            this.$router.push('/profile')
+            this.$router.push('/profile');
         }
     }
 };

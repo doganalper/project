@@ -121,6 +121,8 @@ export const changeJobInfoMutation = (state, payload) => {
 };
 
 export const removeJobMutation = (state, payload) => {
-    const filtered = state.openTeam.stages.find((stage) => stage.stageInfo._id === payload.stageId).jobs.filter((job) => job._id !== payload.jobId);
+    const filtered = state.openTeam.stages
+        .find((stage) => stage.stageInfo._id === payload.stageId)
+        .jobs.filter((job) => job._id !== payload.jobId);
     state.openTeam.stages.find((stage) => stage.stageInfo._id === payload.stageId).jobs = filtered;
-}
+};

@@ -1,16 +1,16 @@
 <template>
-  <modal name="psswdModal" :height="'auto'" :scrollable="true">
-      <div class="modal-div flex-col">
-          <span class="modal-div-header">Change Password</span>
-          <input v-model="oldPass" type="password" placeholder="Old Password"/>
-          <input v-model="newPass1" type="password" placeholder="New Password"/>
-          <input v-model="newPass2" type="password" placeholder="Re-enter Password"/>
-          <span class="modal-div-errorText" v-if="errorText">
-              {{errorText}}
-          </span>
-          <button @click="changePasswordHandler">Change Password</button>
-      </div>
-  </modal>
+    <modal name="psswdModal" :height="'auto'" :scrollable="true">
+        <div class="modal-div flex-col">
+            <span class="modal-div-header">Change Password</span>
+            <input v-model="oldPass" type="password" placeholder="Old Password" />
+            <input v-model="newPass1" type="password" placeholder="New Password" />
+            <input v-model="newPass2" type="password" placeholder="Re-enter Password" />
+            <span class="modal-div-errorText" v-if="errorText">
+                {{ errorText }}
+            </span>
+            <button @click="changePasswordHandler">Change Password</button>
+        </div>
+    </modal>
 </template>
 
 <script>
@@ -23,7 +23,7 @@ export default {
             newPass1: null,
             newPass2: null,
             errorText: null
-        }
+        };
     },
     methods: {
         async changePasswordHandler() {
@@ -38,17 +38,17 @@ export default {
                     this.oldPass = null;
                     this.newPass1 = null;
                     this.newPass2 = null;
-                    this.$modal.hide('psswdModal')
+                    this.$modal.hide('psswdModal');
                 } catch (error) {
                     console.log(error);
-                    this.errorText = 'Old password is wrong!'
+                    this.errorText = 'Old password is wrong!';
                 }
             } else {
-                this.errorText = 'New passwords doesnt match!'
+                this.errorText = 'New passwords doesnt match!';
             }
         }
     }
-}
+};
 </script>
 
 <style lang="scss">

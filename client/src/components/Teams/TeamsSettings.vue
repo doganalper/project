@@ -42,13 +42,23 @@
                 </select>
                 <button class="changeDescription" @click="removeUser">Remove User</button>
             </div>
-            <div class="setting-div">Team fotoğrafı değiştir</div>
+            <div class="setting-div upload flex-col">
+                Team fotoğrafı değiştir
+                <input
+                    type="file"
+                    ref="file"
+                    @change="onSelect"
+                    accept="image/png, image/jpeg, image/jpg"
+                />
+                <button @click="trigger">Upload Image</button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import { changeTeamDetails } from '@/services/Teams';
+import Axios from '@/utils/Axios.js';
 
 export default {
     props: {
@@ -68,7 +78,8 @@ export default {
         return {
             description: null,
             addUserSelect: null,
-            removeUserSelect: null
+            removeUserSelect: null,
+            file: null
         };
     },
     methods: {
@@ -99,7 +110,26 @@ export default {
                 });
             }
             this.removeUserSelect = null;
-        }
+        },
+        trigger() {
+            this.$refs.file.click();
+        },
+        onSelect() {
+            const file = this.$refs.file.files[0];
+            this.file = file;
+            this.sendFile();
+        },
+        async sendFile() {
+            const formData = new FormData();
+            formData.append('teamPic', this.file);
+            console.log(this.file);
+            try {
+                const response = await Axios.post(`/teams/${this.$router.currentRoute.params.teamId}/changePicture`, formData);
+                console.log(response);
+            } catch (err) {
+                console.log(err);
+            }
+        },
     },
     computed: {
         getTeamDescription() {
@@ -124,6 +154,7 @@ export default {
             width: (100% / 4) - 1%;
             padding-right: 0.5rem;
 
+
             .changeDescription {
                 padding: 0.3rem 0;
                 background-color: lightgreen;
@@ -137,6 +168,20 @@ export default {
             select {
                 width: 70%;
                 margin: 0 auto;
+            }
+        }
+
+        .upload {
+            input {
+                display: none;
+            }
+
+            button {
+                padding: 0.4rem 0;
+                background-color: lightgreen;
+                border: none;
+                border-radius: 0.4rem;
+                cursor: pointer;
             }
         }
     }

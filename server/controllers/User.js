@@ -148,13 +148,3 @@ exports.updateProfilePicture = async (req, res) => {
         })
     }
 }
-
-exports.getImage = async (req, res) => {
-    const {file} = req.params;
-    console.log(file);
-    const options = {
-        root: './public'
-    }
-
-    res.sendFile(file, options);
-}

@@ -2,11 +2,13 @@
     <div class="teams">
         <div v-for="team in teams" :key="team._id" class="team-div">
             <img
-                :src="generateImg(teams.teamImg)"
+                :src="generateImg(team.teamImg)"
                 class="team-div-img"
                 @click="goToTeam(team._id)"
             />
-            {{ team.name }}
+            <span>
+                {{ team.name }}
+            </span>
         </div>
     </div>
 </template>
@@ -21,7 +23,7 @@ export default {
     },
     methods: {
         generateImg(img) {
-            return img ? img : '/team-placeholder.png';
+            return img ? require('/home/alperdogan/Desktop/projects/project/server/public/teamPic/' + img) : '/team-placeholder.png';
         },
         goToTeam(teamId) {
             this.$router.push(`${this.$router.currentRoute.path}/team/${teamId}`);
@@ -33,7 +35,7 @@ export default {
 <style lang="scss">
 .teams {
     width: 80%;
-    padding: 5rem;
+    padding: 4rem;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
@@ -44,9 +46,19 @@ export default {
         display: flex;
         flex-flow: column;
         align-items: center;
+        border: 1px solid lightgrey;
+        padding: 0.4rem;
+        padding-bottom: 0;
 
         &-img {
             width: 12rem;
+            height: 180px;
+            background-position: 50% 50%;
+            background-repeat: no-repeat;
+        }
+
+        span {
+            margin: 0.4rem 0;
         }
 
         &:hover {

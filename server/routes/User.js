@@ -12,6 +12,5 @@ router.post('/change-password', authenticateToken, UserController.changePassword
 router.post('/update-me', authenticateToken, UserController.changeUserInfo);
 router.post('/get-user', authenticateToken, UserController.getUserById);
 router.post('/update-profile-picture', multer.single('profilePic'), authenticateToken, UserController.updateProfilePicture);
-router.get('/get-image/:file', UserController.getImage);
 
 module.exports = router;

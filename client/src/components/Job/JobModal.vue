@@ -213,8 +213,11 @@ export default {
         async removeJobHandler() {
             const response = await removeJob(this.jobInfo.stageId, this.jobInfo._id);
             console.log(response);
-            this.$store.commit('removeJobMutation', {jobId: response.jobId, stageId: this.jobInfo.stageId});
-            this.closeModal()
+            this.$store.commit('removeJobMutation', {
+                jobId: response.jobId,
+                stageId: this.jobInfo.stageId
+            });
+            this.closeModal();
         }
     },
     computed: {

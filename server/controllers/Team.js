@@ -65,11 +65,10 @@ exports.updateTeam = async (req, res) => {
     const { teamId } = req.params;
     const {
         name,
-        description,
-        image
+        description
     } = req.body;
 
-    if (!name && !description && !image) return res.status(400).json({ message: "At least one of the fields should be filled!" });
+    if (!name && !description) return res.status(400).json({ message: "At least one of the fields should be filled!" });
     else {
         try {
             const team = await TeamModel.findById(teamId).exec();
@@ -98,6 +97,22 @@ exports.updateTeam = async (req, res) => {
             console.log(error);
             return res.status(400).json({ message: 'There was an error!' })
         }
+    }
+}
+
+exports.changeTeamImage = async (req, res) => {
+    const {teamId} = req.params;
+    console.log(req.file);
+    try {
+        await TeamModel.updateOne({_id: teamId}, {
+            teamImg: req.file.filename
+        })
+        res.status(200).json({message:'Picture changed'});
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({
+            message: 'something went wrong'
+        })
     }
 }
 

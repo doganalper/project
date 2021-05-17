@@ -21,8 +21,15 @@
                 />
             </div>
         </div>
-        <unicon name="cog" fill="royalblue" class="pen" width="15" @click="setSettings" v-if="$store.state.userData.isAdmin"/>
-        <div class="" v-else>{{$store.state.openTeam.teamDetail.description}}</div>
+        <unicon
+            name="cog"
+            fill="royalblue"
+            class="pen"
+            width="15"
+            @click="setSettings"
+            v-if="$store.state.userData.isAdmin"
+        />
+        <div class="" v-else>{{ $store.state.openTeam.teamDetail.description }}</div>
     </div>
 </template>
 
