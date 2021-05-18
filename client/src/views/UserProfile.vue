@@ -5,10 +5,7 @@
                 <span v-if="!userData.profileImage" class="screen-center user-circle">
                     {{ getNameFirsts(userData.name) }}
                 </span>
-                <img
-                    v-else
-                    :src="userData.profileImage"
-                />
+                <img v-else :src="userData.profileImage" />
                 <input
                     type="file"
                     ref="file"
@@ -26,16 +23,16 @@
                     <button @click="changeUserInfoHandler">Set</button>
                 </div>
                 <div class="projects">
-                    <div 
-                        class="project" 
-                        v-for="project in userData.projects" 
+                    <div
+                        class="project"
+                        v-for="project in userData.projects"
                         :key="project.id"
                         @click="routeToProject(project.id)"
                     >
                         <div class="picture screen-center">
                             <unicon name="list-ui-alt" fill="black" />
                         </div>
-                        {{project.name}}
+                        {{ project.name }}
                     </div>
                 </div>
             </div>
@@ -211,10 +208,10 @@ export default {
                     cursor: pointer;
 
                     .picture {
-                    border: 1px solid lightgray;
-                    width: 6rem;
-                    height: 6rem;
-                    margin-bottom: 0.5rem;
+                        border: 1px solid lightgray;
+                        width: 6rem;
+                        height: 6rem;
+                        margin-bottom: 0.5rem;
                     }
                 }
             }

@@ -124,12 +124,15 @@ export default {
             formData.append('teamPic', this.file);
             console.log(this.file);
             try {
-                const response = await Axios.post(`/teams/${this.$router.currentRoute.params.teamId}/changePicture`, formData);
+                const response = await Axios.post(
+                    `/teams/${this.$router.currentRoute.params.teamId}/changePicture`,
+                    formData
+                );
                 console.log(response);
             } catch (err) {
                 console.log(err);
             }
-        },
+        }
     },
     computed: {
         getTeamDescription() {
@@ -153,7 +156,6 @@ export default {
         .setting-div {
             width: (100% / 4) - 1%;
             padding-right: 0.5rem;
-
 
             .changeDescription {
                 padding: 0.3rem 0;

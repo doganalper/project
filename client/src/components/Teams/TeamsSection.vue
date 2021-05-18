@@ -23,7 +23,9 @@ export default {
     },
     methods: {
         generateImg(img) {
-            return img ? require('/home/alperdogan/Desktop/projects/project/server/public/' + img) : '/team-placeholder.png';
+            return img
+                ? require('/home/alperdogan/Desktop/projects/project/server/public/' + img)
+                : '/team-placeholder.png';
         },
         goToTeam(teamId) {
             this.$router.push(`${this.$router.currentRoute.path}/team/${teamId}`);

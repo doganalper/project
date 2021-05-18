@@ -21,20 +21,31 @@
                 />
             </div>
         </div>
-        <unicon
-            name="cog"
-            fill="royalblue"
-            class="pen"
-            width="15"
-            @click="setSettings"
-            v-if="$store.state.userData.isAdmin"
-        />
-        <div class="" v-else>{{ $store.state.openTeam.teamDetail.description }}</div>
+        <div class="icons">
+            <unicon
+                name="trash-alt"
+                class="icons-trash"
+                fill="darkred"
+                v-if="$store.state.userData.isAdmin"
+                width="14"
+                @click="removeTeamHandler"
+            />
+            <unicon
+                name="cog"
+                fill="royalblue"
+                class="pen"
+                width="15"
+                @click="setSettings"
+                v-if="$store.state.userData.isAdmin"
+            />
+            <div class="" v-else>{{ $store.state.openTeam.teamDetail.description }}</div>
+        </div>
+        <v-dialog />
     </div>
 </template>
 
 <script>
-import { changeTeamDetails } from '@/services/Teams';
+import { changeTeamDetails, removeTeam } from '@/services/Teams';
 
 export default {
     data() {
@@ -57,6 +68,36 @@ export default {
                 this.newName = null;
                 this.isRenameOpen = null;
             }
+        },
+        removeTeamHandler() {
+            this.$modal.show('dialog', {
+                title: 'Do you want to delete this team?',
+                text: 'This team will be deleted without any possibility to return!',
+                buttons: [
+                    {
+                        title: 'Cancel',
+                        handler: () => {
+                            this.$modal.hide('dialog');
+                        }
+                    },
+                    {
+                        title: 'Remove Team',
+                        class: 'delete-team-button',
+                        handler: async () => {
+                            const response = await removeTeam(
+                                this.$store.state.openTeam.teamDetail._id
+                            );
+                            console.log(response);
+                            if (response.status === 200) {
+                                this.$modal.hide('dialog');
+                                this.$router.push(
+                                    `/project/${this.$store.state.openProject.projectDetail._id}`
+                                );
+                            }
+                        }
+                    }
+                ]
+            });
         }
     }
 };
@@ -73,6 +114,16 @@ export default {
     align-items: center;
     justify-content: space-between;
 
+    .delete-team-button {
+        width: 100%;
+        font-size: 0.8rem;
+        border: none;
+        background: lightsalmon;
+        padding: 0.4rem 0;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
     &-name {
         display: flex;
         align-items: center;
@@ -85,6 +136,12 @@ export default {
 
     input {
         margin: 0 0.5rem;
+    }
+
+    .icons {
+        &-trash {
+            margin-right: 0.7rem;
+        }
     }
 }
 </style>
