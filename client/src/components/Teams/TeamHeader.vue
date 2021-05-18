@@ -2,7 +2,7 @@
     <div class="team-header">
         <div class="team-header-name">
             <b>Takım: </b> {{ $store.state.openTeam.teamDetail.name }}
-            <div class="change-div" v-if="$store.state.userData.isAdmin">
+            <div class="change-div" v-if="$store.state.userData.isAdmin && isSettingsOpen">
                 <transition name="input">
                     <input
                         type="text"
@@ -48,6 +48,12 @@
 import { changeTeamDetails, removeTeam } from '@/services/Teams';
 
 export default {
+    props: {
+        isSettingsOpen: {
+            type: Boolean,
+            default: false
+        }
+    },
     data() {
         return {
             isRenameOpen: false,
