@@ -9,6 +9,7 @@ const projectRoutes = require('./routes/Projects');
 const teamRoutes = require('./routes/Teams');
 const stageRoutes = require('./routes/Stages');
 const jobRoutes = require('./routes/Jobs');
+const guestRoutes = require('./routes/Guests');
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use('/projects', projectRoutes);
 app.use('/teams', teamRoutes);
 app.use('/stage', stageRoutes);
 app.use('/job', jobRoutes);
+app.use('/guest', guestRoutes);
 
 app.listen(3000);

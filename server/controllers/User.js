@@ -1,4 +1,4 @@
-const {v4: uuidv4} = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const fs = require('fs');
 
@@ -22,7 +22,8 @@ exports.createUser = async (req, res) => {
             return res.status(200).json({
                 status: 200,
                 message: "User created!",
-                accessToken: token
+                accessToken: token,
+                userType: 'member'
             })
         } catch (err) {
             const error = err.message.split(' ')[0];
@@ -79,13 +80,13 @@ exports.getUser = async (req, res) => {
 
 exports.changePassword = async (req, res) => {
     const user = req.user;
-    const {oldPassword, newPassword1, newPassword2} = req.body;
+    const { oldPassword, newPassword1, newPassword2 } = req.body;
     const foundUser = await UserModel.findById(user.id);
 
-    if (oldPassword !== foundUser.password) return res.status(400).json({message: 'Old password is wrong'})
-    else if (newPassword1 !== newPassword2) return res.status(400).json({message: 'New passwords does not match'})
+    if (oldPassword !== foundUser.password) return res.status(400).json({ message: 'Old password is wrong' })
+    else if (newPassword1 !== newPassword2) return res.status(400).json({ message: 'New passwords does not match' })
     else {
-        await UserModel.updateOne({_id: user.id}, {
+        await UserModel.updateOne({ _id: user.id }, {
             password: newPassword1
         })
 
@@ -97,11 +98,11 @@ exports.changePassword = async (req, res) => {
 
 exports.changeUserInfo = async (req, res) => {
     const user = req.user;
-    const {name, surname} = req.body;
+    const { name, surname } = req.body;
 
-    if (!name && !surname) return res.status(400).json({message: 'At least one field must be provided'});
+    if (!name && !surname) return res.status(400).json({ message: 'At least one field must be provided' });
     else {
-        await UserModel.updateOne({_id: user.id}, {
+        await UserModel.updateOne({ _id: user.id }, {
             name: name ? name : user.name,
             surname: surname ? surname : user.surname
         });
@@ -114,13 +115,13 @@ exports.changeUserInfo = async (req, res) => {
     }
 };
 
-exports.getUserById = async (req,res) => {
-    const {userId} = req.body;
+exports.getUserById = async (req, res) => {
+    const { userId } = req.body;
 
-    await UserModel.findOne({_id: userId}, (err, doc) => {
+    await UserModel.findOne({ _id: userId }, (err, doc) => {
         if (err) {
             console.log(err);
-            return res.status(400).json({message:'Something went wrong!'})
+            return res.status(400).json({ message: 'Something went wrong!' })
         }
         let foundUser = doc.toObject();
         delete foundUser['password'];
@@ -135,7 +136,7 @@ exports.getUserById = async (req,res) => {
 exports.updateProfilePicture = async (req, res) => {
     const user = req.user;
     try {
-        await UserModel.updateOne({_id: user.id}, {
+        await UserModel.updateOne({ _id: user.id }, {
             userImage: req.file.filename
         })
         res.status(200).json({
