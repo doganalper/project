@@ -68,3 +68,15 @@ export const removeUsersFromTeam = (teamId, userId) => {
             });
     });
 };
+
+export const removeTeam = (teamId) => {
+    return new Promise((resolve, reject) => {
+        Axios.delete(`/teams/${teamId}`)
+            .then((result) => {
+                resolve(result);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};

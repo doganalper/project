@@ -1,6 +1,6 @@
 <template>
     <div class="team-main full-screen" v-if="$store.state.openTeam.teamDetailLoading === false">
-        <TeamHeader @setSettingsPanel="setSettingsPanel" />
+        <TeamHeader @setSettingsPanel="setSettingsPanel" :isSettingsOpen="isSettingsOpen" />
         <TeamSettings
             v-if="isSettingsOpen"
             :usersNotInTeam="getUsersNotInTeam"

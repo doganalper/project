@@ -167,7 +167,7 @@ export const removeSubJob = (subJobId) => {
     });
 };
 
-export const removeJob = (stageId,jobId) => {
+export const removeJob = (stageId, jobId) => {
     return new Promise((resolve, reject) => {
         Axios.post(`/job/deleteJob/${stageId}`, {
             jobId: jobId
@@ -179,4 +179,4 @@ export const removeJob = (stageId,jobId) => {
                 reject(err);
             });
     });
-}
+};

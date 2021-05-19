@@ -128,6 +128,13 @@ export default {
         }
     }
 
+    &-create {
+        width: 15%;
+        input {
+            width: 100%;
+        }
+    }
+
     &-description {
         display: flex;
         align-items: center;
