@@ -17,7 +17,8 @@ const routes = [
         children: [
             {
                 path: '/',
-                component: localStorage.getItem('userType') === 'guest' ? GuestProjects : Projectspage
+                component:
+                    localStorage.getItem('userType') === 'guest' ? GuestProjects : Projectspage
             },
             {
                 path: '/project/:projectId',

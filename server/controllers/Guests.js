@@ -54,25 +54,24 @@ exports.getUser = async (req, res) => {
     const user = req.user;
     const foundUser = await GuestModel.findById(user.id);
 
-    // TODO: Change this
-    /* let projects = [];
-    if (foundUser.projects.length !== 0) {
-        for (const projectId of foundUser.projects) {
-            const project = await ProjectModel.find({ _id: '' + projectId }).exec();
-            const status = project[0].admins.includes(user.id) ? 'admin' : 'member';
-            projects.push({
-                name: project[0].name,
-                id: project[0].id,
-                status: status
-            })
-        }
-    } */
+    const projectInfos = foundUser.includedProjects.map(async (projectId) => {
+        /* return await CommentModel.findOne({_id: commentId}, async (err, doc) => {
+            const commentInfo = await doc.toObject();
+            commentInfo.isUser = (doc.userId === user.id);
+            return commentInfo;
+        }) */
+
+        return await ProjectModel.findOne({ _id: projectId }, async (err, doc) => {
+            return doc.toObject();
+        })
+    });
+    const projectsArr = await Promise.all(projectInfos);
 
     res.json({
         userId: user.id,
         email: foundUser.email,
         name: `${foundUser.name} ${foundUser.surname}`,
-        projects: foundUser.includedProjects,
+        projects: projectsArr,
         requests: foundUser.requests
     });
 };

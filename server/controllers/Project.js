@@ -195,7 +195,6 @@ exports.getProjectDetails = async (req, res) => {
     const { projectId } = req.params;
 
     try {
-        const user = await UserModel.findById(userId).exec();
         const project = await ProjectModel.findById(projectId).exec();
         let members = project.admins.concat(project.members);
         members = await Promise.all(members.map(async (member) => {
@@ -206,15 +205,11 @@ exports.getProjectDetails = async (req, res) => {
             };
         }));
         const projectTeams = await TeamModel.find({ projectId: projectId }).exec();
-        if (!user.projects.includes(`${projectId}`)) {
-            return res.status(401).json({ message: 'You cannot access this project details!' });
-        } else {
-            return res.status(200).json({
-                project,
-                teamsDetails: projectTeams,
-                projectMembers: members
-            });
-        }
+        return res.status(200).json({
+            project,
+            teamsDetails: projectTeams,
+            projectMembers: members
+        });
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: 'There was an error!' });

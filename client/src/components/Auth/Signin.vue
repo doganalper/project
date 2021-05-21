@@ -46,7 +46,6 @@ export default {
             if (this.type === 'guest') {
                 try {
                     const response = await loginAsGuest(payload);
-                    console.log(response);
                     saveAuthToken(response.accessToken);
                     localStorage.setItem('userType', response.userType);
                     this.$router.push('/');
