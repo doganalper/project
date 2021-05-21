@@ -3,6 +3,7 @@
         <Header :username="$store.state.userData.name" />
         <router-view />
     </div>
+    <div v-else>AAAA</div>
 </template>
 
 <script>
@@ -14,7 +15,11 @@ export default {
     },
     methods: {},
     mounted() {
-        this.$store.dispatch('getUserData');
+        if (localStorage.getItem('userType') === 'guest') {
+            this.$store.dispatch('getGuestData');
+        } else {
+            this.$store.dispatch('getUserData');
+        }
     }
 };
 </script>

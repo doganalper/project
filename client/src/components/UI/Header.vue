@@ -2,10 +2,18 @@
     <div class="header flex-row">
         <div class="logo" @click="routeToMain">Project</div>
         <div class="buttons-part flex-row">
-            <div class="button" @click="routeToProfile" v-if="!$route.path.includes('profile')">
+            <div
+                class="button"
+                @click="routeToProfile"
+                v-if="!$route.path.includes('profile') && !getUser()"
+            >
                 My Profile
             </div>
-            <div class="button" @click="routeToMain" v-if="$route.path.includes('profile')">
+            <div
+                class="button"
+                @click="routeToMain"
+                v-if="$route.path.includes('profile') && !getUser()"
+            >
                 My Projects
             </div>
             <div class="button" @click="logout">Logout</div>
@@ -27,6 +35,9 @@ export default {
         },
         routeToProfile() {
             this.$router.push('/profile');
+        },
+        getUser() {
+            return localStorage.getItem('userType') === 'guest';
         }
     }
 };

@@ -46,7 +46,7 @@ exports.login = async (req, res) => {
             return res.status(404).json({ message: 'Guest not found!' })
         }
         const token = generateAccessToken({ id: foundGuest.id, email: email });
-        return res.status(200).json({ accessToken: token });
+        return res.status(200).json({ accessToken: token, userType: 'guest' });
     }
 };
 

@@ -7,6 +7,7 @@ import {
 import { getTeamDetail, addUserToTeam, removeUsersFromTeam } from '@/services/Teams.js';
 import { removeStage, createStage, changeStageName } from '@/services/Stages.js';
 import { createNewJob } from '@/services/Job.js';
+import { getGuest } from '@/services/Guest.js';
 
 export const getUserData = async ({ commit }) => {
     commit('userDataLoading', true);
@@ -115,4 +116,14 @@ export const removeUsersFromTeamAction = async ({ commit }, payload) => {
     const response = await removeUsersFromTeam(payload.teamId, payload.userId);
     commit('setTeamMembersMutation', response.member);
     commit('setTeamDetail', response.team);
+};
+
+export const getGuestData = async ({ commit }) => {
+    const response = await getGuest();
+    console.log(response);
+    if (!response) {
+        commit('userDataLoading', false);
+    }
+    commit('setUserData', response);
+    commit('userDataLoading', false);
 };
