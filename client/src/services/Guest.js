@@ -63,3 +63,67 @@ export const getRequestsByArray = (requestsArray) => {
             });
     });
 };
+
+export const getRequestInfo = (requestId) => {
+    return new Promise((resolve, reject) => {
+        Axios.get('/guest/getRequest/' + requestId)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
+export const changeRequestStatus = (reqId) => {
+    return new Promise((resolve, reject) => {
+        Axios.patch(`/guest/request/status`, {
+            requestId: reqId
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
+export const createRequestComment = (payload) => {
+    return new Promise((resolve, reject) => {
+        Axios.post(`/guest/request/comment/add`, payload)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
+export const removeRequest = (requestId, projectId) => {
+    return new Promise((resolve, reject) => {
+        Axios.patch(`/guest/request/${projectId}`, {
+            requestId
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
+export const createRequest = (projectId, payload) => {
+    return new Promise((resolve, reject) => {
+        Axios.post(`/guest/request/${projectId}`, payload)
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+}

@@ -2,6 +2,7 @@ const GuestModel = require('../models/guestModel');
 const RequestModel = require('../models/requestModel');
 const ProjectModel = require('../models/projectModel');
 const RequestCommentModel = require('../models/requestCommentModel');
+const UserModel = require('../models/userModel');
 
 const { generateAccessToken } = require('../utils/authFunctions');
 
@@ -233,5 +234,42 @@ exports.getRequests = async (req, res) => {
     const requestsArr = await Promise.all(requestInfos);
     return res.status(200).json({
         infos: requestsArr
+    });
+};
+
+exports.getRequestInfo = async (req, res) => {
+    const { requestId } = req.params;
+    const requestInfo = await RequestModel.findById(requestId).exec();
+    const comments = requestInfo.comments.map(async (commentId) => {
+        return await RequestCommentModel.findOne({ _id: commentId }, async (err, doc) => {
+            const objectDoc = doc.toObject();
+            return objectDoc;
+        })
+    });
+    let creatorInfo = await UserModel.findById(requestInfo.creator).exec();
+    if (!creatorInfo) {
+        creatorInfo = await GuestModel.findById(requestInfo.creator).exec();
+    }
+    let commentsArr = await Promise.all(comments);
+    commentsArr = commentsArr.map(async (comment) => {
+        let userInfo;
+        if (comment.userType === 'guest') {
+            userInfo = await GuestModel.findById(comment.userId).exec();
+            console.log(userInfo);
+        } else {
+            userInfo = await UserModel.findById(comment.userId).exec();
+            console.log(userInfo);
+        }
+        return {
+            ...comment._doc,
+            user: userInfo
+        }
+    });
+    commentsArr = await Promise.all(commentsArr);
+    console.log(commentsArr);
+    return res.status(200).json({
+        ...requestInfo._doc,
+        comments: commentsArr,
+        creator: creatorInfo.name + ' ' + creatorInfo.surname
     });
 }
