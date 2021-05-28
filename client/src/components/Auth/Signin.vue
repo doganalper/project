@@ -48,8 +48,9 @@ export default {
                     const response = await loginAsGuest(payload);
                     saveAuthToken(response.accessToken);
                     localStorage.setItem('userType', response.userType);
-                    this.$router.push('/');
+                    this.$router.push('/guest');
                 } catch (err) {
+                    console.log('AAA');
                     return (this.errorText = 'User not found!');
                 }
             } else {
@@ -59,6 +60,7 @@ export default {
                     localStorage.setItem('userType', response.userType);
                     this.$router.push('/');
                 } catch (err) {
+                    console.log('BBB');
                     return (this.errorText = 'User not found!');
                 }
             }

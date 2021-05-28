@@ -28,6 +28,7 @@ export default {
     methods: {
         logout() {
             removeToken();
+            localStorage.removeItem('userType');
             this.$router.push('/auth');
         },
         routeToMain() {

@@ -35,3 +35,31 @@ export const getGuest = () => {
             });
     });
 };
+
+export const getGuestsByArray = (guestsArray) => {
+    return new Promise((resolve, reject) => {
+        Axios.post('/guest/getByArray', {
+            guestsArr: guestsArray
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
+export const getRequestsByArray = (requestsArray) => {
+    return new Promise((resolve, reject) => {
+        Axios.post('/guest/getRequests', {
+            requestIdArr: requestsArray
+        })
+            .then((result) => {
+                resolve(result.data);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
