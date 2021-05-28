@@ -60,7 +60,6 @@ exports.getUser = async (req, res) => {
             commentInfo.isUser = (doc.userId === user.id);
             return commentInfo;
         }) */
-
         return await ProjectModel.findOne({ _id: projectId }, async (err, doc) => {
             return doc.toObject();
         })
@@ -209,4 +208,30 @@ exports.updateRequest = async (req, res) => {
             message: 'Something went wrong!'
         })
     }
+}
+
+exports.getGuestsById = async (req, res) => {
+    const { guestsArr } = req.body;
+    const guestsInfo = guestsArr.map(async (guestId) => {
+        return await GuestModel.findOne({ _id: guestId }, async (err, doc) => {
+            return doc.toObject();
+        })
+    })
+    const infoArr = await Promise.all(guestsInfo);
+    return res.status(200).json({
+        infos: infoArr
+    })
+};
+
+exports.getRequests = async (req, res) => {
+    const { requestIdArr } = req.body;
+    const requestInfos = requestIdArr.map(async (requestId) => {
+        return await RequestModel.findOne({ _id: requestId }, async (err, doc) => {
+            return doc.toObject();
+        })
+    });
+    const requestsArr = await Promise.all(requestInfos);
+    return res.status(200).json({
+        infos: requestsArr
+    });
 }

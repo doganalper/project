@@ -10,6 +10,8 @@ router.get('/profile-me', authenticateToken, GuestController.getUser);
 router.post('/request/comment/add', authenticateToken, GuestController.addCommentToRequest);
 router.patch('/request/status', authenticateToken, GuestController.changeRequestStatus);
 router.patch('/request/update/:projectId', authenticateToken, GuestController.updateRequest);
+router.post('/getByArray', authenticateToken, GuestController.getGuestsById);
+router.post('/getRequests', authenticateToken, GuestController.getRequests)
 router.route('/request/:projectId')
     .post(authenticateToken, GuestController.createRequest)
     .patch(authenticateToken, GuestController.removeRequest)
