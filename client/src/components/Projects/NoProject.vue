@@ -1,7 +1,7 @@
 <template>
     <div class="no-project screen-center fullscreen flex-col">
         <img src="/svg/searching.svg" />
-        <span class="no-project-text">Looks like you don't have a project <span>YET!</span></span>
+        <span class="no-project-text">Lütfen bir proje oluşturun!</span>
         <div class="create-project flex-col">
             <div v-if="showCreateInput" class="flex-col">
                 <input
@@ -12,7 +12,7 @@
                 />
                 <span v-if="errorText">{{ errorText }}</span>
             </div>
-            <button @click="showCreateDiv">Create a project now</button>
+            <button @click="showCreateDiv">Projeyi oluştur</button>
         </div>
     </div>
 </template>

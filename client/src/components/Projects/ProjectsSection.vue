@@ -3,7 +3,7 @@
         <div class="projects">
             <div class="headerSection" @click="isAdminProjectsOpen = !isAdminProjectsOpen">
                 <unicon :name="isAdminProjectsOpen ? 'angle-up' : 'angle-down'" fill="black" />
-                <span>Admin Projects</span>
+                <span>Yönetici olduğunuz projeler</span>
             </div>
             <div v-if="isAdminProjectsOpen">
                 <div v-if="filteredProjects.adminProjects.length !== 0" class="projects-line">
@@ -20,13 +20,13 @@
                         {{ project.name }}
                     </div>
                 </div>
-                <span v-else>You aren't a part of any project</span>
+                <span v-else>Dahil olduğunuz bir proje bulunmamaktadır.</span>
             </div>
         </div>
         <div class="projects">
             <div class="headerSection" @click="isMemberProjectsOpen = !isMemberProjectsOpen">
                 <unicon :name="isMemberProjectsOpen ? 'angle-up' : 'angle-down'" fill="black" />
-                <span>Projects that you are member</span>
+                <span>Üyesi olduğunuz projeler</span>
             </div>
             <div v-if="isMemberProjectsOpen">
                 <div v-if="filteredProjects.memberProjects.length !== 0" class="projects-line">
@@ -43,17 +43,17 @@
                         {{ project.name }}
                     </div>
                 </div>
-                <span v-else>You aren't a part of any project</span>
+                <span v-else>Dahil olduğunuz bir proje bulunmamaktadır.</span>
             </div>
         </div>
         <div class="bracket flex-row">
             <div class="hl"></div>
-            <span>Or</span>
+            <span>Ya da</span>
             <div class="hl"></div>
         </div>
         <div class="create-project flex-col">
             <input type="text" v-model="newProjectName" />
-            <button @click="createProject">Create a project</button>
+            <button @click="createProject">Proje Oluştur</button>
         </div>
     </div>
 </template>

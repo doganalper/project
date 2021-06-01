@@ -2,19 +2,19 @@
     <div class="signin flex-col">
         <label for="email">Email</label>
         <input type="email" v-model="email" name="email" />
-        <label for="password">Password</label>
+        <label for="password">Şifre</label>
         <input type="password" v-model="password" name="password" />
         <div class="buttons flex-row">
             <div>
                 <input type="radio" name="type" value="user" v-model="type" />
-                <label for="yes">User</label>
+                <label for="yes">Kullanıcı</label>
             </div>
             <div>
                 <input type="radio" name="type" value="guest" v-model="type" />
-                <label for="yes">Guest</label>
+                <label for="yes">Misafir</label>
             </div>
         </div>
-        <button @click="signinhandler">Signin</button>
+        <button @click="signinhandler">Giriş Yap</button>
         <span v-if="errorText">
             {{ errorText }}
         </span>

@@ -1,7 +1,7 @@
 <template>
     <div class="members-div">
         <div class="members-div-header">
-            <span> Members </span>
+            <span> Projedeki Üyeler </span>
         </div>
         <div class="members">
             <b v-for="member in members" :key="member.info.id" class="members-container">
@@ -25,14 +25,14 @@
             </span>
         </div>
         <div class="add-member flex-col" v-if="$store.state.userData.isAdmin">
-            <input type="email" placeholder="User mail" v-model="emailOfMember" />
+            <input type="email" placeholder="Kullanıcı maili" v-model="emailOfMember" />
             <span v-if="$store.state.openProject.membersErrorText !== null">
                 {{ $store.state.openProject.membersErrorText }}
             </span>
-            <button @click="addUser">Add User</button>
+            <button @click="addUser">Üye ekle</button>
         </div>
         <div class="delete-project" v-if="$store.state.userData.isAdmin">
-            <button @click="deleteProject" class="delete-project-button">Delete Project</button>
+            <button @click="deleteProject" class="delete-project-button">Projeyi sil</button>
         </div>
         <v-dialog />
     </div>
@@ -96,22 +96,22 @@ export default {
             if (userId !== this.$store.state.userData.userId || !isUserAdmin) {
                 return this.$store.dispatch('removeUserFromProjectAction', userId);
             } else {
-                this.removeUserError = "You can't delete this user!";
+                this.removeUserError = 'Bu kullanıcıyı silemezsiniz!';
             }
         },
         deleteProject() {
             this.$modal.show('dialog', {
-                title: 'Do you want to delete this project?',
-                text: 'This project will be deleted without any possibility to return!',
+                title: 'Projeyi silmek istediğinizden emin misiniz?',
+                text: 'Bu proje geri döndürülemez şekilde silinecektir.',
                 buttons: [
                     {
-                        title: 'Cancel',
+                        title: 'İptal',
                         handler: () => {
                             this.$modal.hide('dialog');
                         }
                     },
                     {
-                        title: 'Delete',
+                        title: 'Sil',
                         class: 'delete-project-button',
                         handler: async () => {
                             const response = await deleteProject(

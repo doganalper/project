@@ -1,26 +1,26 @@
 <template>
     <div class="signup flex-col">
-        <label for="name">Name</label>
+        <label for="name">İsim</label>
         <input type="text" v-model="userdata.name" name="name" />
-        <label for="surname">Surname</label>
+        <label for="surname">Soyisim</label>
         <input type="text" v-model="userdata.surname" name="surname" />
         <label for="email">Email</label>
         <input type="email" v-model="userdata.email" name="email" />
-        <label for="password">Password</label>
+        <label for="password">Şifre</label>
         <input type="password" v-model="userdata.password" name="password" />
-        <label for="password-confirm">Password Confirm</label>
+        <label for="password-confirm">Şifre Tekrarı</label>
         <input type="password" v-model="userdata.passwordConfirm" name="password-confirm" />
         <div class="buttons flex-row">
             <div>
                 <input type="radio" name="type" value="user" v-model="type" />
-                <label for="yes">User</label>
+                <label for="yes">Kullanıcı</label>
             </div>
             <div>
                 <input type="radio" name="type" value="guest" v-model="type" />
-                <label for="yes">Guest</label>
+                <label for="yes">Misafir</label>
             </div>
         </div>
-        <button @click="signuphandler">Signup</button>
+        <button @click="signuphandler">Kayıt ol</button>
         <span v-if="errorText">
             {{ errorText }}
         </span>

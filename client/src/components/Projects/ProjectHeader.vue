@@ -8,7 +8,7 @@
                         type="text"
                         v-model="newProjectName"
                         v-show="isRenameOpen"
-                        placeholder="Press enter to change"
+                        placeholder="İsim giriniz"
                         @keyup.enter="changeProjectName"
                     />
                 </transition>
@@ -29,7 +29,7 @@
             <input
                 type="text"
                 v-model="createdTeamName"
-                placeholder="Press enter to create team"
+                placeholder="Proje oluşturmak için isim giriniz"
                 @keyup.enter="createTeam"
             />
         </div>
@@ -47,7 +47,7 @@
                         type="text"
                         v-model="newDescription"
                         v-show="isDescriptionOpen"
-                        placeholder="Press enter to change"
+                        placeholder="Açıklama giriniz"
                         @keyup.enter="changeDescription"
                     />
                 </transition>

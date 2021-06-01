@@ -1,14 +1,14 @@
 <template>
     <modal name="psswdModal" :height="'auto'" :scrollable="true">
         <div class="modal-div flex-col">
-            <span class="modal-div-header">Change Password</span>
-            <input v-model="oldPass" type="password" placeholder="Old Password" />
-            <input v-model="newPass1" type="password" placeholder="New Password" />
-            <input v-model="newPass2" type="password" placeholder="Re-enter Password" />
+            <span class="modal-div-header">Şifre Değiştir</span>
+            <input v-model="oldPass" type="password" placeholder="Mevcut Şifre" />
+            <input v-model="newPass1" type="password" placeholder="Yeni Şifre" />
+            <input v-model="newPass2" type="password" placeholder="Yeni Şifre Tekrar" />
             <span class="modal-div-errorText" v-if="errorText">
                 {{ errorText }}
             </span>
-            <button @click="changePasswordHandler">Change Password</button>
+            <button @click="changePasswordHandler">Değiştir</button>
         </div>
     </modal>
 </template>

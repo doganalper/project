@@ -6,13 +6,13 @@
                     :class="tab === 'signin' && 'openTab'"
                     class="border-left"
                     @click="setTab('signin')"
-                    >Signin</span
+                    >Giriş Yap</span
                 >
                 <span
                     :class="tab === 'signup' && 'openTab'"
                     class="border-right"
                     @click="setTab('signup')"
-                    >Signup</span
+                    >Kayıt Ol</span
                 >
             </div>
             <div class="card-content">

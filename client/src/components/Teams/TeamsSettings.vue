@@ -2,7 +2,7 @@
     <div class="teams-settings flex-col">
         <div class="teams-settings-main flex-row">
             <div class="setting-div flex-col">
-                Description:
+                Açıklama
                 <textarea
                     cols="20"
                     rows="4"
@@ -10,14 +10,12 @@
                     :placeholder="getTeamDescription"
                 >
                 </textarea>
-                <button class="changeDescription" @click="changeDescription">
-                    Change Description
-                </button>
+                <button class="changeDescription" @click="changeDescription">Değiştir</button>
             </div>
             <div class="setting-div flex-col">
-                Add User:
+                Üye Ekle
                 <select v-model="addUserSelect">
-                    <option disabled selected="true" :value="null">Select a user</option>
+                    <option disabled selected="true" :value="null">Kullanıcı Seçiniz!</option>
                     <option
                         :value="{ userId: user.info._id }"
                         v-for="user in usersNotInTeam"
@@ -26,12 +24,12 @@
                         {{ user.info.name }}
                     </option>
                 </select>
-                <button class="changeDescription" @click="addUser">Add User</button>
+                <button class="changeDescription" @click="addUser">Üye Ekle</button>
             </div>
             <div class="setting-div flex-col">
-                Remove User:
+                Üye Kaldır
                 <select v-model="removeUserSelect">
-                    <option disabled selected="true" :value="null">Select a user</option>
+                    <option disabled selected="true" :value="null">Kullanıcı Seçiniz!</option>
                     <option
                         :value="{ userId: user.info._id }"
                         v-for="user in usersInTeam"
@@ -40,17 +38,17 @@
                         {{ user.info.name }}
                     </option>
                 </select>
-                <button class="changeDescription" @click="removeUser">Remove User</button>
+                <button class="changeDescription" @click="removeUser">Üyeyi Kaldır</button>
             </div>
             <div class="setting-div upload flex-col">
-                Team fotoğrafı değiştir
+                Takım fotoğrafı değiştir
                 <input
                     type="file"
                     ref="file"
                     @change="onSelect"
                     accept="image/png, image/jpeg, image/jpg"
                 />
-                <button @click="trigger">Upload Image</button>
+                <button @click="trigger">Fotoğrafı Yükle</button>
             </div>
         </div>
     </div>
@@ -138,7 +136,7 @@ export default {
         getTeamDescription() {
             return this.$store.state.openTeam.teamDetail.description
                 ? this.$store.state.openTeam.teamDetail.description
-                : 'Enter your description here!';
+                : 'Açıklamayı giriniz!';
         }
     }
 };

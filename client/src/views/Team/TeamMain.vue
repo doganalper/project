@@ -51,13 +51,13 @@
                         />
                     </div>
                     <input
-                        placeholder="Enter Job Name Here"
+                        placeholder="İş ismi giriniz"
                         @keyup.enter="addEvent(stage.stageInfo._id)"
                         v-model="newJobName"
                         v-if="stageMenu.openInput === 'addJob'"
                     />
                     <input
-                        placeholder="Enter Stage Name"
+                        placeholder="Aşama adı giriniz"
                         @keyup.enter="changeStageName(stage.stageInfo._id)"
                         v-model="stageChangeInput"
                         v-else-if="stageMenu.openInput === 'changeName'"
@@ -78,12 +78,12 @@
                 </div>
             </div>
             <div class="flex-col create-stage">
-                <span> Create New Stage </span>
+                <span> Yeni bir aşama oluşturunuz </span>
                 <input
                     v-model="newStageName"
                     type="text"
                     @keyup.enter="createNewStage"
-                    placeholder="Enter Stage Name Here"
+                    placeholder="Aşama adını giriniz"
                 />
             </div>
         </div>

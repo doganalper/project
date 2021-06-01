@@ -15,8 +15,10 @@
                 />
             </div>
             <div class="request-detail-details flex-col">
-                <span class="creator">Created By: {{ requestInfo.creator }}</span>
-                <span class="dueDate">Created At: {{ parseDate(requestInfo.createdDate) }}</span>
+                <span class="creator">Yaratan Kişi: {{ requestInfo.creator }}</span>
+                <span class="dueDate"
+                    >Yaratılış Tarihi: {{ parseDate(requestInfo.createdDate) }}</span
+                >
                 <span
                     class="dueDate"
                     :style="
@@ -27,17 +29,17 @@
                             ? { color: 'red' }
                             : { color: 'green' }
                     "
-                    >Due Date: {{ parseDate(requestInfo.dueDate) }} ({{
+                    >Bitiş Tarihi: {{ parseDate(requestInfo.dueDate) }} ({{
                         Math.ceil(
                             Math.abs(new Date() - new Date(requestInfo.dueDate)) /
                                 (1000 * 60 * 60 * 24)
                         )
                     }}
-                    days left)</span
+                    Gün Kaldı)</span
                 >
             </div>
             <div class="request-detail-comments flex-row" @click="isCommentsOpen = !isCommentsOpen">
-                <span>Comments:</span>
+                <span>Yorumlar:</span>
                 <unicon :name="isCommentsOpen ? 'angle-down' : 'angle-up'" />
             </div>
             <div class="request-detail-create-comment flex-col" v-if="isCommentsOpen">
@@ -46,18 +48,18 @@
                     rows="3"
                     spellcheck="false"
                     v-model="comment"
-                    placeholder="Enter your comment here"
+                    placeholder="Yorumunuzu giriniz"
                 >
                 </textarea>
-                <div class="create-comment-button flex-row">
-                    <button @click="createCommentHandler">Add</button>
+                <div class="create-comment-buttonn flex-row">
+                    <button @click="createCommentHandler">Yorum Oluştur</button>
                     <unicon name="paperclip" fill="blue" width="18" class="clip" @click="addFile" />
                     <input type="file" class="file" ref="file" @change="onSelect" />
                 </div>
             </div>
             <div class="request-detail-comments-list flex-col" v-if="isCommentsOpen">
                 <div
-                    class="comment flex-row"
+                    class="commenta flex-row"
                     v-for="comment in requestInfo.comments"
                     :key="comment._id"
                 >
@@ -101,7 +103,7 @@ export default {
             console.log(this.requestInfo);
         },
         parseDate(date) {
-            return new Date(date).toDateString();
+            return new Date(date).toLocaleDateString('tr-TR');
         },
         async changeRequestStatusHandler() {
             await changeRequestStatus(this.eventId);
@@ -167,7 +169,7 @@ export default {
     &-comments-list {
         padding-top: 0.5rem;
         row-gap: 0.3rem;
-        .comment {
+        .commenta {
             align-items: center;
             font-size: 0.9rem;
             padding-top: 0.3rem;
@@ -190,7 +192,7 @@ export default {
                 border-color: black;
             }
         }
-        &-button {
+        &-buttonn {
             text-align: end;
             margin-bottom: 0.4rem;
         }

@@ -1,13 +1,13 @@
 <template>
     <div class="no-team screen-center flex-col">
         <img src="/svg/searching.svg" />
-        <span class="no-team-text"> Looks like you don't have any teams. </span>
+        <span class="no-team-text"> Herhangi bir takımınız yok! </span>
         <div class="create-team flex-col" v-if="$store.state.userData.isAdmin">
             <div v-if="showCreateInput" class="flex-col">
                 <input v-if="!errorText" type="text" v-model="createdTeamName" class="team-input" />
                 <span v-if="errorText">{{ errorText }}</span>
             </div>
-            <button @click="showCreateDiv">Create a team now</button>
+            <button @click="showCreateDiv">Takım oluştur</button>
         </div>
     </div>
 </template>

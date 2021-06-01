@@ -10,7 +10,7 @@
                             :style="{ height: '1.4rem', marginRight: '0.3rem' }"
                             v-model="rename.newName"
                             v-show="rename.isOpen"
-                            placeholder="Press enter to change"
+                            placeholder="Yeni ismi giriniz"
                             @keyup.enter="changeInfo"
                         />
                     </transition>
@@ -29,9 +29,9 @@
                 ></unicon>
             </div>
             <div class="job-info-assign">
-                Assigned To:
+                Atanmış kullanıcı:
                 <select v-model="assignedUser" @change="assignUser">
-                    <option :value="null">No one</option>
+                    <option :value="null">Kimse</option>
                     <option
                         :value="user.info._id"
                         v-for="user in getUsersThatCanTakeJobs"
@@ -42,7 +42,7 @@
                 </select>
             </div>
             <div class="job-info-date flex-row">
-                <span :style="{ marginRight: '0.6rem' }">Finish Date: </span>
+                <span :style="{ marginRight: '0.6rem' }"> Bitirilme Tarihi: </span>
                 <Datepicker
                     v-model="dueDate"
                     @selected="changeDueDate"
@@ -51,25 +51,21 @@
                 />
             </div>
             <div class="job-info-description flex-col">
-                <span>Description:</span>
+                <span>Açıklama</span>
                 <textarea
                     cols="20"
                     rows="4"
                     spellcheck="false"
                     v-model="description"
-                    :placeholder="
-                        description
-                            ? description
-                            : 'This job does not have a description yet. Write description and press enter to save it!'
-                    "
+                    :placeholder="description ? description : 'Bir açıklama giriniz'"
                     @keydown.ctrl.enter="changeInfo"
                 >
                 </textarea>
             </div>
-            <button class="remove-button" @click="removeJobHandler">Remove Job</button>
+            <button class="remove-button" @click="removeJobHandler">İşi Sil</button>
             <div class="job-info-comment flex-col">
                 <div class="comment-header flex-row" @click="isCommentsOpen = !isCommentsOpen">
-                    <span>Comments:</span>
+                    <span>Yorumlar:</span>
                     <unicon :name="isCommentsOpen ? 'angle-down' : 'angle-up'" />
                 </div>
                 <div v-if="isCommentsOpen">
@@ -84,7 +80,7 @@
             </div>
             <div class="job-info-subJob flex-col">
                 <div class="subJob-header flex-row" @click="isSubJobsOpen = !isSubJobsOpen">
-                    <span>Sub Jobs:</span>
+                    <span>Alt İşler:</span>
                     <div class="flex-row">
                         <span>{{ getFinishedJobCount + ' / ' + subJobCounts }}</span>
                         <unicon :name="isSubJobsOpen ? 'angle-down' : 'angle-up'" />

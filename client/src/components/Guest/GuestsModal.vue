@@ -1,13 +1,13 @@
 <template>
     <modal name="guestsModal" :height="'auto'" @before-open="beforeOpen">
         <div class="members-div">
-            <div class="members-div-header">Guests</div>
+            <div class="members-div-header">Misafirler</div>
             <div class="members-div-list" v-if="guestInfos && guestInfos.length !== 0">
                 <div class="list-object flex-row" v-for="guest in guestInfos" :key="guest._id">
                     <span>{{ parseName(guest.name, guest.surname) }}</span>
                 </div>
             </div>
-            <div v-else>This project doesn't have any guests yet!</div>
+            <div v-else>Bu projede daha misafir bulunmamaktadır!</div>
         </div>
     </modal>
 </template>

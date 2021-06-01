@@ -2,7 +2,7 @@
     <div class="create-subjob">
         <input
             v-model="subJobName"
-            placeholder="Enter sub job name"
+            placeholder="Alt iş ismi giriniz"
             @keyup.enter="createSubJobHandler"
         />
     </div>

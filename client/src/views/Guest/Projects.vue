@@ -1,6 +1,6 @@
 <template>
     <div class="guest-projects flex-col">
-        <span class="guest-projects-header">Projects That You're Involved With</span>
+        <span class="guest-projects-header">Dahil olduğunuz projeler</span>
         <div class="guest-projects-list flex-col">
             <div
                 v-for="project in $store.state.userData.projects"
@@ -11,10 +11,10 @@
                     {{ project.name }}
                 </span>
                 <div class="project-content flex-row">
-                    <button @click="openModal('members', project._id)">See Members</button>
-                    <button @click="openModal('guests', project._id)">See Guests</button>
-                    <button @click="openModal('teams', project._id)">See Teams</button>
-                    <button @click="openModal('requests', project._id)">See Requests</button>
+                    <button @click="openModal('members', project._id)">Üyeleri Gör</button>
+                    <button @click="openModal('guests', project._id)">Misafirleri Gör</button>
+                    <button @click="openModal('teams', project._id)">Takımları Gör</button>
+                    <button @click="openModal('requests', project._id)">İstekleri Gör</button>
                 </div>
             </div>
         </div>

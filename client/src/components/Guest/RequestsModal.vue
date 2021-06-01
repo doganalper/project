@@ -1,7 +1,7 @@
 <template>
     <modal name="requestsModal" :height="'600'" @before-open="beforeOpen">
         <div class="requests-div">
-            <div class="requests-div-header">Requests</div>
+            <div class="requests-div-header">İstekler</div>
             <div class="requests-div-list">
                 <div v-if="requestsInfo && requestsInfo.length !== 0">
                     <div
@@ -33,18 +33,18 @@
                     </div>
                 </div>
                 <div class="create-request flex-col">
-                    <span>Create Request:</span>
+                    <span>İstek Yarat:</span>
                     <div class="main flex-row">
                         <div class="flex-col">
-                            <span>Header:</span>
+                            <span>Başlık:</span>
                             <input
                                 type="text"
                                 v-model="requestHeader"
-                                placeholder="Header for request"
+                                placeholder="İsteğin başlığı"
                             />
                         </div>
                         <div>
-                            <span>Due: </span>
+                            <span>Bitiş Tarihi: </span>
                             <Datepicker
                                 v-model="dueDate"
                                 @selected="changeDueDate"
@@ -52,7 +52,7 @@
                                 :disabled-dates="datePickerConfig.disabledDates"
                             />
                         </div>
-                        <button @click="createReqHandler">Create Request</button>
+                        <button @click="createReqHandler">İstek yarat</button>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@ export default {
             console.log(this.requestsInfo);
         },
         parseDate(date) {
-            return new Date(date).toDateString();
+            return new Date(date).toLocaleDateString('tr-TR');
         },
         openRequestDetail(requestId) {
             this.$modal.show('requestDetail', { requestId: requestId });

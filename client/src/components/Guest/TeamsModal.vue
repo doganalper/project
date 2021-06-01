@@ -1,7 +1,7 @@
 <template>
     <modal name="teamsModal" @before-open="beforeOpen">
         <div class="teams-div">
-            <div class="teams-div-header">Teams</div>
+            <div class="teams-div-header">Takımlar</div>
             <div class="teams-div-list" v-if="teams && teams.length !== 0">
                 <div class="list-object flex-row" v-for="team in teams" :key="team._id">
                     <span class="list-object-image flex-row">

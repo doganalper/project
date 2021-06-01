@@ -13,14 +13,14 @@
                     accept="image/png, image/jpeg, image/jpg"
                 />
                 <span>{{ userData.name }}</span>
-                <button @click="trigger">Upload Image</button>
+                <button @click="trigger">Fotoğraf değiştir</button>
             </div>
             <div class="user-profile-frame-right">
                 <div class="settings">
-                    <input v-model="name" type="text" placeholder="Name" />
-                    <input v-model="surname" type="text" placeholder="Surname" />
-                    <span @click="openModal">Set Password</span>
-                    <button @click="changeUserInfoHandler">Set</button>
+                    <input v-model="name" type="text" placeholder="İsim" />
+                    <input v-model="surname" type="text" placeholder="Soyisim" />
+                    <span @click="openModal">Şifre Değiştir</span>
+                    <button @click="changeUserInfoHandler">Değiştir</button>
                 </div>
                 <div class="projects">
                     <div

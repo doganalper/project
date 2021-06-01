@@ -1,7 +1,7 @@
 <template>
     <modal name="membersModal" :height="'auto'" @before-open="beforeOpen">
         <div class="members-div">
-            <div class="members-div-header">Members</div>
+            <div class="members-div-header">Üyeler</div>
             <div class="members-div-list" v-if="members && members.length !== 0">
                 <div class="list-object flex-row" v-for="member in members" :key="member._id">
                     <span class="list-object-image flex-row">
@@ -19,7 +19,7 @@
                     <span>{{ parseName(member.name, member.surname) }}</span>
                 </div>
             </div>
-            <div v-else>This project doesn't have any members yet!</div>
+            <div v-else>Bu projede daha üye bulunmamaktadır!</div>
         </div>
     </modal>
 </template>

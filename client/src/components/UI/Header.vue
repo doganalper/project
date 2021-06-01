@@ -7,16 +7,16 @@
                 @click="routeToProfile"
                 v-if="!$route.path.includes('profile') && !getUser()"
             >
-                My Profile
+                Profilim
             </div>
             <div
                 class="button"
                 @click="routeToMain"
                 v-if="$route.path.includes('profile') && !getUser()"
             >
-                My Projects
+                Projelerim
             </div>
-            <div class="button" @click="logout">Logout</div>
+            <div class="button" @click="logout">Çıkış Yap</div>
         </div>
     </div>
 </template>
