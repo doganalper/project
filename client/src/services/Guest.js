@@ -126,4 +126,4 @@ export const createRequest = (projectId, payload) => {
                 reject(err);
             });
     });
-}
+};

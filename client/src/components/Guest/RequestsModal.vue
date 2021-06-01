@@ -2,22 +2,34 @@
     <modal name="requestsModal" :height="'600'" @before-open="beforeOpen">
         <div class="requests-div">
             <div class="requests-div-header">Requests</div>
-            <div class="requests-div-list" v-if="requestsInfo && requestsInfo.length !== 0">
-                <div
-                    class="list-object flex-row"
-                    v-for="request in requestsInfo"
-                    :key="request._id"
-                    @click="openRequestDetail(request._id)"
-                >
-                    <span>{{ request.header }}</span>
-                    <div class="flex-row info">
-                        <span>{{ parseDate(request.dueDate) }}</span>
-                        <unicon
-                            name="check-circle"
-                            :fill="request.isFinished ? 'green' : 'black'"
-                            width="17"
-                            class="subJob-check"
-                        />
+            <div class="requests-div-list">
+                <div v-if="requestsInfo && requestsInfo.length !== 0">
+                    <div
+                        class="list-object flex-row"
+                        v-for="request in requestsInfo"
+                        :key="request._id"
+                        @click="openRequestDetail(request._id)"
+                    >
+                        <span>{{ request.header }}</span>
+                        <div class="flex-row info">
+                            <span
+                                :style="
+                                    Math.ceil(
+                                        Math.abs(new Date() - new Date(request.dueDate)) /
+                                            (1000 * 60 * 60 * 24)
+                                    ) < 4
+                                        ? { color: 'red' }
+                                        : { color: 'green' }
+                                "
+                                >{{ parseDate(request.dueDate) }}</span
+                            >
+                            <unicon
+                                name="check-circle"
+                                :fill="request.isFinished ? 'green' : 'black'"
+                                width="17"
+                                class="subJob-check"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="create-request flex-col">

@@ -20,6 +20,7 @@
                     @click="isRenameOpen = !isRenameOpen"
                 />
             </div>
+            <unicon name="archive" width="15" @click="openRequests" class="request" />
         </div>
         <div
             v-if="$store.state.userData.isAdmin && $store.state.openProject.teams.length !== 0"
@@ -55,13 +56,18 @@
                 {{ getDescription }}
             </span>
         </div>
+        <RequestsModal />
     </div>
 </template>
 
 <script>
 import { changeProjectDetail } from '@/services/Projects.js';
+import RequestsModal from '@/components/Guest/RequestsModal.vue';
 
 export default {
+    components: {
+        RequestsModal
+    },
     data() {
         return {
             isRenameOpen: false,
@@ -95,6 +101,11 @@ export default {
         createTeam() {
             if (this.createdTeamName) this.$emit('createTeam', this.createdTeamName);
             this.createdTeamName = null;
+        },
+        openRequests() {
+            this.$modal.show('requestsModal', {
+                projectId: this.$store.state.openProject.projectDetail._id
+            });
         }
     },
     computed: {
@@ -149,7 +160,8 @@ export default {
         }
     }
 
-    .pen {
+    .request {
+        margin-left: 0.5rem;
         cursor: pointer;
     }
 

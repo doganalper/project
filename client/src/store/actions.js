@@ -35,6 +35,7 @@ export const getProjectDetail = async ({ commit, state }, projectId) => {
             commit('setIfUserAdmin', false);
         }
         commit('setProjectDetail', projectDetail.project);
+        console.log(projectDetail.project);
         commit('setTeams', projectDetail.teamsDetails);
         commit('setProjectMembers', projectDetail.projectMembers);
         commit('projectDetailLoading', false);
