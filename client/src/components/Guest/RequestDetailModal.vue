@@ -17,7 +17,24 @@
             <div class="request-detail-details flex-col">
                 <span class="creator">Created By: {{ requestInfo.creator }}</span>
                 <span class="dueDate">Created At: {{ parseDate(requestInfo.createdDate) }}</span>
-                <span class="dueDate">Due Date: {{ parseDate(requestInfo.dueDate) }}</span>
+                <span
+                    class="dueDate"
+                    :style="
+                        Math.ceil(
+                            Math.abs(new Date() - new Date(requestInfo.dueDate)) /
+                                (1000 * 60 * 60 * 24)
+                        ) < 4
+                            ? { color: 'red' }
+                            : { color: 'green' }
+                    "
+                    >Due Date: {{ parseDate(requestInfo.dueDate) }} ({{
+                        Math.ceil(
+                            Math.abs(new Date() - new Date(requestInfo.dueDate)) /
+                                (1000 * 60 * 60 * 24)
+                        )
+                    }}
+                    days left)</span
+                >
             </div>
             <div class="request-detail-comments flex-row" @click="isCommentsOpen = !isCommentsOpen">
                 <span>Comments:</span>
@@ -32,8 +49,10 @@
                     placeholder="Enter your comment here"
                 >
                 </textarea>
-                <div class="create-comment-button">
+                <div class="create-comment-button flex-row">
                     <button @click="createCommentHandler">Add</button>
+                    <unicon name="paperclip" fill="blue" width="18" class="clip" @click="addFile" />
+                    <input type="file" class="file" ref="file" @change="onSelect" />
                 </div>
             </div>
             <div class="request-detail-comments-list flex-col" v-if="isCommentsOpen">
@@ -70,7 +89,8 @@ export default {
             requestInfo: null,
             eventId: null,
             isCommentsOpen: false,
-            comment: null
+            comment: null,
+            file: null
         };
     },
     methods: {
@@ -109,6 +129,13 @@ export default {
             const response = await removeRequest(this.requestInfo._id, this.requestInfo.projectId);
             console.log(response);
             this.$emit('requestDeleted', this.requestInfo._id);
+        },
+        addFile() {
+            this.$refs.file.click();
+        },
+        onSelect() {
+            const file = this.$refs.file.files[0];
+            this.file = file;
         }
     }
 };
@@ -167,6 +194,13 @@ export default {
             text-align: end;
             margin-bottom: 0.4rem;
         }
+    }
+    .clip {
+        margin-left: 0.6rem;
+        cursor: pointer;
+    }
+    .file {
+        visibility: hidden;
     }
 }
 </style>
