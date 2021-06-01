@@ -21,6 +21,14 @@ const projectModel = new mongoose.Schema({
     teams: {
         type: [String],
         default: []
+    },
+    guests: {
+        type: [String],
+        default: []
+    },
+    requests: {
+        type: [String],
+        default: []
     }
 }, {
     collection: 'projects'

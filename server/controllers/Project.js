@@ -1,6 +1,7 @@
 const ProjectModel = require('../models/projectModel');
 const UserModel = require('../models/userModel');
 const TeamModel = require('../models/teamModel');
+const GuestModel = require('../models/guestModel');
 
 exports.createProject = async (req, res) => {
     const { name } = req.body;
@@ -194,7 +195,6 @@ exports.getProjectDetails = async (req, res) => {
     const { projectId } = req.params;
 
     try {
-        const user = await UserModel.findById(userId).exec();
         const project = await ProjectModel.findById(projectId).exec();
         let members = project.admins.concat(project.members);
         members = await Promise.all(members.map(async (member) => {
@@ -205,17 +205,60 @@ exports.getProjectDetails = async (req, res) => {
             };
         }));
         const projectTeams = await TeamModel.find({ projectId: projectId }).exec();
-        if (!user.projects.includes(`${projectId}`)) {
-            return res.status(401).json({ message: 'You cannot access this project details!' });
-        } else {
-            return res.status(200).json({
-                project,
-                teamsDetails: projectTeams,
-                projectMembers: members
-            });
-        }
+        return res.status(200).json({
+            project,
+            teamsDetails: projectTeams,
+            projectMembers: members
+        });
     } catch (error) {
         console.log(error);
         return res.status(400).json({ message: 'There was an error!' });
+    }
+}
+
+exports.addGuestToProject = async (req, res) => {
+    const { guestEmail } = req.body;
+    const projectId = req.params.projectId;
+
+    try {
+        const foundGuest = await GuestModel.findOne({ email: guestEmail });
+        await GuestModel.updateOne(
+            { _id: foundGuest._id },
+            { $push: { includedProjects: projectId } }
+        );
+
+        const project = await ProjectModel.updateOne(
+            { _id: projectId },
+            { $push: { guests: foundGuest._id } }
+        );
+        console.log(project);
+
+        return res.status(200).json(project)
+
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+exports.removeGuestFromProject = async (req, res) => {
+    const projectId = req.params.projectId;
+    const { guestId } = req.body;
+
+    if (!guestId) return res.status(400).json({ message: 'Fields cannot be empty' })
+    else {
+        try {
+            await ProjectModel.updateOne({ _id: projectId }, { $pullAll: { guests: [guestId] } });
+            await GuestModel.updateOne({ _id: guestId }, { $pullAll: { includedProjects: [projectId] } });
+            return res.status(200).json({
+                message: 'Guest Removed From Project',
+                removed: {
+                    guestId: guestId,
+                    projectId: projectId
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({ message: 'There was an error!' })
+        }
     }
 }

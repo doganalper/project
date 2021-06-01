@@ -10,6 +10,16 @@
         <input type="password" v-model="userdata.password" name="password" />
         <label for="password-confirm">Password Confirm</label>
         <input type="password" v-model="userdata.passwordConfirm" name="password-confirm" />
+        <div class="buttons flex-row">
+            <div>
+                <input type="radio" name="type" value="user" v-model="type" />
+                <label for="yes">User</label>
+            </div>
+            <div>
+                <input type="radio" name="type" value="guest" v-model="type" />
+                <label for="yes">Guest</label>
+            </div>
+        </div>
         <button @click="signuphandler">Signup</button>
         <span v-if="errorText">
             {{ errorText }}
@@ -19,6 +29,7 @@
 
 <script>
 import { signup } from '@/services/Auth.js';
+import { signupAsGuest } from '@/services/Guest.js';
 import { saveAuthToken } from '@/utils/localstorage.js';
 
 export default {
@@ -31,11 +42,15 @@ export default {
                 password: null,
                 passwordConfirm: null
             },
-            errorText: null
+            errorText: null,
+            type: null
         };
     },
     methods: {
         async signuphandler() {
+            if (!this.type) {
+                return (this.errorText = 'Choose User Type');
+            }
             this.errorText = null;
             for (const key in this.userdata) {
                 const data = this.userdata[key];
@@ -43,13 +58,30 @@ export default {
                     return (this.errorText = 'Fields cannot be empty!');
                 }
             }
-            try {
-                const response = await signup(this.userdata);
-                saveAuthToken(response.accessToken);
-                this.$router.push('/');
-            } catch (error) {
-                return (this.errorText = 'There was an error :(');
+            if (this.type === 'guest') {
+                try {
+                    const response = await signupAsGuest(this.userdata);
+                    saveAuthToken(response.accessToken);
+                    localStorage.setItem('userType', response.userType);
+                    this.$router.push('/');
+                } catch (error) {
+                    return (this.errorText = 'There was an error :(');
+                }
+            } else {
+                try {
+                    const response = await signup(this.userdata);
+                    saveAuthToken(response.accessToken);
+                    localStorage.setItem('userType', response.userType);
+                    this.$router.push('/');
+                } catch (error) {
+                    return (this.errorText = 'There was an error :(');
+                }
             }
+        }
+    },
+    watch: {
+        type: (val) => {
+            console.log(val);
         }
     }
 };
@@ -80,6 +112,15 @@ export default {
         color: rgb(248, 76, 76);
         font-weight: 700;
         margin-top: 1rem;
+    }
+    .buttons {
+        margin-top: 0.5rem;
+        div {
+            margin-left: 1rem;
+            input {
+                margin-right: 0.3rem;
+            }
+        }
     }
 }
 </style>

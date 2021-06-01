@@ -4,6 +4,16 @@
         <input type="email" v-model="email" name="email" />
         <label for="password">Password</label>
         <input type="password" v-model="password" name="password" />
+        <div class="buttons flex-row">
+            <div>
+                <input type="radio" name="type" value="user" v-model="type" />
+                <label for="yes">User</label>
+            </div>
+            <div>
+                <input type="radio" name="type" value="guest" v-model="type" />
+                <label for="yes">Guest</label>
+            </div>
+        </div>
         <button @click="signinhandler">Signin</button>
         <span v-if="errorText">
             {{ errorText }}
@@ -13,6 +23,7 @@
 
 <script>
 import { signin } from '@/services/Auth.js';
+import { loginAsGuest } from '@/services/Guest.js';
 import { saveAuthToken } from '@/utils/localstorage.js';
 
 export default {
@@ -20,7 +31,8 @@ export default {
         return {
             email: null,
             password: null,
-            errorText: null
+            errorText: null,
+            type: null
         };
     },
     methods: {
@@ -31,13 +43,26 @@ export default {
                 email: this.email,
                 password: this.password
             };
-            try {
-                // response.accessToken dönüyor.
-                const response = await signin(payload);
-                saveAuthToken(response.accessToken);
-                this.$router.push('/');
-            } catch (err) {
-                return (this.errorText = 'User not found!');
+            if (this.type === 'guest') {
+                try {
+                    const response = await loginAsGuest(payload);
+                    saveAuthToken(response.accessToken);
+                    localStorage.setItem('userType', response.userType);
+                    this.$router.push('/guest');
+                } catch (err) {
+                    console.log('AAA');
+                    return (this.errorText = 'User not found!');
+                }
+            } else {
+                try {
+                    const response = await signin(payload);
+                    saveAuthToken(response.accessToken);
+                    localStorage.setItem('userType', response.userType);
+                    this.$router.push('/');
+                } catch (err) {
+                    console.log('BBB');
+                    return (this.errorText = 'User not found!');
+                }
             }
         }
     }
@@ -69,6 +94,16 @@ export default {
         color: rgb(248, 76, 76);
         font-weight: 700;
         margin-top: 1rem;
+    }
+
+    .buttons {
+        margin-top: 0.5rem;
+        div {
+            margin-left: 1rem;
+            input {
+                margin-right: 0.3rem;
+            }
+        }
     }
 }
 </style>
