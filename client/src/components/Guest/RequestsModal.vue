@@ -1,7 +1,10 @@
 <template>
     <modal name="requestsModal" :height="'600'" @before-open="beforeOpen">
         <div class="requests-div">
-            <div class="requests-div-header">İstekler</div>
+            <div class="requests-div-header flex-row">
+                İstekler
+                <unicon name="calendar-alt" width="15" class="calendar" @click="openCalendar" />
+            </div>
             <div class="requests-div-list">
                 <div v-if="requestsInfo && requestsInfo.length !== 0">
                     <div
@@ -57,13 +60,18 @@
                 </div>
             </div>
         </div>
-        <RequestDetailModal @requestDeleted="requestRemoveHandler" />
+        <RequestDetailModal
+            @requestDeleted="requestRemoveHandler"
+            @changeReqStatus="changeReqStatusHandler"
+        />
+        <CalendarModal @requestRemoved="requestRemoveHandler" />
     </modal>
 </template>
 
 <script>
 import { getRequestsByArray, createRequest } from '@/services/Guest.js';
 import { fetchProjectDetail } from '@/services/Projects.js';
+import CalendarModal from '@/components/Guest/CalendarModal.vue';
 import RequestDetailModal from '@/components/Guest/RequestDetailModal.vue';
 import Datepicker from 'vuejs-datepicker';
 
@@ -84,16 +92,26 @@ export default {
     },
     components: {
         RequestDetailModal,
-        Datepicker
+        Datepicker,
+        CalendarModal
     },
     methods: {
+        changeReqStatusHandler(id) {
+            const foundEvent = this.requestsInfo.find((req) => req._id === id);
+            const idx = this.requestsInfo.findIndex((req) => req._id === id);
+            console.log(foundEvent);
+            foundEvent.isFinished = !foundEvent.isFinished;
+            this.requestsInfo[idx] = foundEvent;
+        },
+        openCalendar() {
+            this.$modal.show('calendarModal', { requests: this.requestsInfo });
+        },
         async beforeOpen(event) {
             this.projectId = event.params.projectId;
             const response = await fetchProjectDetail(this.projectId);
             const requestIdsArr = response.project.requests;
             const requests = await getRequestsByArray(requestIdsArr);
             this.requestsInfo = requests.infos;
-            console.log(this.requestsInfo);
         },
         parseDate(date) {
             return new Date(date).toLocaleDateString('tr-TR');
@@ -131,6 +149,11 @@ export default {
         border-bottom: 1.5px solid lightgray;
         width: 100%;
         margin-bottom: 0.5rem;
+        align-items: center;
+        justify-content: space-between;
+        .calendar {
+            cursor: pointer;
+        }
     }
     &-list {
         .list-object {

@@ -108,6 +108,7 @@ export default {
         async changeRequestStatusHandler() {
             await changeRequestStatus(this.eventId);
             this.requestInfo.isFinished = !this.requestInfo.isFinished;
+            this.$emit('changeReqStatus', this.eventId);
         },
         async createCommentHandler() {
             if (this.comment) {

@@ -12,7 +12,8 @@ import {
     uniTrashAlt,
     uniUsersAlt,
     uniArchive,
-    uniPaperclip
+    uniPaperclip,
+    uniCalendarAlt
 } from 'vue-unicons/dist/icons';
 
 Unicon.add([
@@ -28,7 +29,8 @@ Unicon.add([
     uniTrashAlt,
     uniUsersAlt,
     uniArchive,
-    uniPaperclip
+    uniPaperclip,
+    uniCalendarAlt
 ]);
 
 export default Unicon;
